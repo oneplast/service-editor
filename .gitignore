@@ -55,3 +55,9 @@ application-local.yaml
 !/docs/learn/README.md
 !/docs/learn/troubleshooting/
 !/docs/learn/troubleshooting/README.md
+/docs/followup/active/**
+!/docs/followup/active/
+!/docs/followup/active/.gitkeep
+/.codex/state/**
+!/.codex/state/
+!/.codex/state/.gitkeep

@@ -1,0 +1,2 @@
+# `check-doc-governance.sh`가 금지 참조 검사에서 제외할 경로 glob
+docs/learn/**

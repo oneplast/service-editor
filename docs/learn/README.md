@@ -13,17 +13,13 @@
 - 공유용 참조나 PR 본문 링크 대상으로 사용하지 않는다.
 - 다른 사람이 저장소 기준으로 공식 산출물을 찾는 경로처럼 다루지 않는다.
 - 이 경로에서 정리한 내용은 다른 공식 문서 경로로 다시 정리되기 전까지, `docs/`, `prompts/`, PR 산출물의 직접 근거나 링크 대상으로 사용하지 않는다.
-- 문제 해결 과정을 기록하는 문서는 [docs/learn/troubleshooting/](https://github.com/jho951/editor-service/blob/main/docs/learn/troubleshooting/README.md)에 두고, 해당 경로를 다룰 때는 [docs/learn/troubleshooting/README.md](https://github.com/jho951/editor-service/blob/main/docs/learn/troubleshooting/README.md)를 먼저 읽는다.
+- 문제 해결 과정을 기록하는 문서는 [docs/learn/troubleshooting/README.md](https://github.com/jho951/Block-server/blob/dev/docs/learn/troubleshooting/README.md)에 두고, 해당 경로를 다룰 때는 그 README를 먼저 읽는다.
+- 세션 복구와 진행 중 작업 handoff는 `docs/learn/`가 아니라 `docs/followup/`에서 관리한다.
 
 ## 기본 디렉토리 규칙
 
 - 주제는 도메인 디렉토리로 나눈다.
-- 예:
-  - `infra/`
-  - `concurrency/`
-  - `spring/`
-  - `testing/`
-  - `database/`
+- 같은 주제의 후속 질문이면 새 파일을 만들지 말고 기존 문서를 확장한다.
 
 ## 파일명 규칙
 
@@ -34,8 +30,6 @@
 - 피할 예:
   - `2026-03-31-ci-cd-study.md`
   - `today-question.md`
-
-같은 주제의 후속 질문이면 새 파일을 만들지 말고 기존 문서를 확장한다.
 
 ## 문서 종류
 
@@ -57,8 +51,6 @@
 
 ## 권장 문서 흐름
 
-새 학습 문서를 만들거나 기존 문서를 크게 보강할 때는 가능하면 아래 순서를 따른다.
-
 1. `왜 지금 이걸 보는가`
 2. `먼저 잡을 핵심 개념`
 3. `이 프로젝트에서 보면 어디에 적용되는가`
@@ -77,25 +69,3 @@
 - 정의만 나열하지 말고 "그래서 여기서는 무엇을 보면 되는가"까지 연결한다.
 - 비교가 필요하면 좋은 경우와 나쁜 경우를 같이 적는다.
 - follow-up 질문이 예상되면 문서 마지막에 다음 질문 후보를 남긴다.
-- 개인 학습 문서는 교과서 요약보다 현재 저장소 맥락 연결을 더 강하게 우선한다.
-
-## 새 요청이 왔을 때 작성 플로우
-
-1. 같은 주제 문서가 이미 있는지 먼저 찾는다.
-2. 있으면 그 문서를 확장한다.
-3. 없으면 도메인 디렉토리를 정하고 새 주제 문서를 만든다.
-4. 시리즈가 될 가능성이 높으면 `...-learning-map.md`도 함께 만든다.
-5. 답변 본문에서는 핵심만 요약하고, 자세한 설명은 이 폴더 문서로 축적한다.
-
-## 현재 예시
-
-- 인프라 시리즈:
-  - `infra/infra-learning-map.md`
-  - `infra/infra-runtime-basics.md`
-  - `infra/infra-docker-and-compose.md`
-  - `infra/infra-env-and-secrets.md`
-  - `infra/infra-ci-cd-and-github-actions.md`
-  - `infra/infra-msa-deployment.md`
-  - `infra/infra-terraform-and-iac.md`
-- 동시성 설명:
-  - `concurrency/serializing-answer-and-countdownlatch.md`
