@@ -32,6 +32,7 @@
 - `AGENTS.md`는 진입 규칙과 작업 절차를 담당한다.
 - 문서 전역 규칙은 `docs/README.md`가 담당한다.
 - 디렉토리별 상세 작성 기준은 각 경로 `README.md`가 담당한다.
+- `docs/discussions/`와 `docs/decisions/`는 컨텍스트 절약을 위해 삭제하는 경로가 아니라, 필요할 때 README와 관련 문서에서 따라가는 공식 근거 경로다.
 - 세션 복구와 진행 중 작업 handoff는 `docs/followup/`가 담당한다.
 - 문서 거버넌스와 구현 검증 경계는 `.codex/config/*`, `.codex/scripts/*`, 관련 runbook이 담당한다.
 - 원본 작업 로그는 `prompts/worklog/`, 주제별 탐색 문서는 `prompts/topics/`에서 관리한다.

@@ -95,3 +95,11 @@
 - 변경 내용: `AGENTS.md`의 문서 경로 설명을 진입 규칙과 핵심 분류 기준 중심으로 압축하고, 세부 분류는 `docs/README.md`, `prompts/README.md`, 각 경로 `README.md`로 위임했다.
 - 변경 내용: `.codex/scripts/check-doc-governance.sh`, `.codex/scripts/check-doc-implementation.sh`, `.codex/scripts/verify-and-retry.sh`가 `--scope-file` 없이 실행되면 `git status` 전체 fallback 사용 중이라는 `[INFO]` 메시지를 출력하게 바꿨다.
 - 판단: 잘 스코프된 작업이 더 잘 동작한다는 현재 운영 방향에 맞게, 자주 읽는 문서는 줄이고 넓은 fallback은 더 눈에 띄게 경고하는 편이 토큰과 검증 비용을 함께 줄인다.
+
+## Step 14. main 리베이스 뒤 공식 결정 기록 복구
+
+- 목적: 배포/인프라 기준은 `main`을 유지하되, 하네스가 필요한 공식 의사결정 문맥을 잃지 않게 한다.
+- 변경 내용: `docs/decisions/`, `docs/discussions/`, `prompts/topics/`, 과거 worklog를 `docs/##_AI_문서_고도화` 기준으로 복구했다.
+- 변경 내용: `main`에서 이미 `REQUIREMENTS`와 explainer에 반영된 document resource 경계의 누락 ADR로 `docs/decisions/022-keep-document-canonical-state-in-db-and-link-external-resources.md`를 추가했다.
+- 변경 내용: `docs/followup/000-active-task-template.md`의 빈 항목 trailing whitespace를 정리하고, `prompts/README.md`의 중복 요약 목록을 줄였다.
+- 판단: 공식 결정/검토 문서는 저장소에 남기고, 하네스는 README와 topic을 통해 필요한 문서만 좁혀 읽는 방식이 컨텍스트 최소화와 정합성 유지에 더 맞다.

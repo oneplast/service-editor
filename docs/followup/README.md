@@ -97,5 +97,6 @@
 ## 템플릿과 정리
 
 - 새 파일은 [docs/followup/000-active-task-template.md](https://github.com/jho951/Block-server/blob/dev/docs/followup/000-active-task-template.md) 기준으로 만든다.
+- 템플릿의 빈 항목은 `-`와 `1.`처럼 placeholder만 두고, 불필요한 trailing whitespace를 남기지 않는다.
 - 작업이 끝났고 다시 이어갈 필요가 없으면 파일을 삭제한다.
 - 후속 작업이 남아 있으면 완료 항목은 지우고 다음 세션에 필요한 최소 상태만 남긴다.

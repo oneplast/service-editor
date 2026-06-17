@@ -2,9 +2,6 @@
 
 이 디렉토리는 AI 작업 기록을 보관한다.
 
-- `worklog/`: 실제로 반영한 변경 작업의 날짜별 로그
-- `topics/`: 비교 검토나 탐색 메모
-
 - [prompts/worklog/](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/README.md)
   - 원본 작업 로그 보관
   - 월 단위 디렉토리(`YYYY-MM/`) 아래에 날짜별 로그 파일 유지
