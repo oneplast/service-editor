@@ -9,3 +9,4 @@
 - 프로젝트별 세션 복구와 handoff 기준은 `docs/followup/`을 따른다.
 - 문서 체계 검증은 `.codex/scripts/check-doc-governance.sh`, 구현 검증 필요 여부 판별과 테스트 실행은 `.codex/scripts/check-doc-implementation.sh`를 기준으로 한다.
 - 검증 실패 재검증과 실패 케이스 즉시 기록은 `.codex/config/failure-route-map.md`, `.codex/scripts/verify-and-retry.sh`, `.codex/skills/verification-retry/SKILL.md`를 기준으로 한다.
+- 구현 검증의 경로별 태스크와 로컬 제외 테스트는 `.codex/config/doc-to-code-check-matrix.md`를 원본으로 본다.

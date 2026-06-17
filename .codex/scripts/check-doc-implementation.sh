@@ -90,6 +90,18 @@ reasons=()
 require_check=false
 full_test=false
 runbook_only_notice=false
+excluded_boot_test='com.documents.api.resource.ResourceAccessAndLifecycleIntegrationTest'
+boot_test_classes=(
+  'com.documents.api.block.AdminBlockApiIntegrationTest'
+  'com.documents.api.block.BlockAttachmentApiIntegrationTest'
+  'com.documents.api.block.DocumentBlocksApiIntegrationTest'
+  'com.documents.api.document.DocumentApiIntegrationTest'
+  'com.documents.api.document.DocumentSnapshotApiIntegrationTest'
+  'com.documents.api.editor.EditorOperationApiIntegrationTest'
+  'com.documents.api.editor.EditorOperationConcurrencyIntegrationTest'
+  'com.documents.boot.DocumentsOperationalConfigurationTest'
+  'com.documents.boot.PersistenceSchemaIntegrationTest'
+)
 
 add_task_once() {
   local task=$1
@@ -100,6 +112,66 @@ add_task_once() {
     fi
   done
   module_tasks+=("$task")
+}
+
+requires_boot_test_exclusion() {
+  local task
+  for task in "${module_tasks[@]:-}"; do
+    if [ "$task" = 'test' ] || [ "$task" = ':documents-boot:test' ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+run_gradle_verification() {
+  local task has_boot_test regular_tasks test_args
+  has_boot_test=false
+  regular_tasks=()
+
+  for task in "$@"; do
+    case "$task" in
+      test)
+        add_regular_task_once ':documents-api:test' regular_tasks
+        add_regular_task_once ':documents-core:test' regular_tasks
+        add_regular_task_once ':documents-infrastructure:test' regular_tasks
+        has_boot_test=true
+        ;;
+      :documents-boot:test)
+        has_boot_test=true
+        ;;
+      *)
+        add_regular_task_once "$task" regular_tasks
+        ;;
+    esac
+  done
+
+  if [ ${#regular_tasks[@]} -gt 0 ]; then
+    printf 'Gradle 테스트 실행: ./gradlew %s\n' "${regular_tasks[*]}"
+    ./gradlew "${regular_tasks[@]}"
+  fi
+
+  if [ "$has_boot_test" = true ]; then
+    printf '[INFO] %s 제외: platform/resource lifecycle 외부 권한 범위 테스트는 Codex 구현 검증 대상에서 제외합니다.\n' "$excluded_boot_test"
+    test_args=(':documents-boot:test')
+    for task in "${boot_test_classes[@]}"; do
+      test_args+=(--tests "$task")
+    done
+    printf 'Gradle 테스트 실행: ./gradlew %s\n' "${test_args[*]}"
+    ./gradlew "${test_args[@]}"
+  fi
+}
+
+add_regular_task_once() {
+  local task=$1
+  local -n tasks_ref=$2
+  local existing
+  for existing in "${tasks_ref[@]:-}"; do
+    if [ "$existing" = "$task" ]; then
+      return
+    fi
+  done
+  tasks_ref+=("$task")
 }
 
 if has_changed '^documents-api/src/|^documents-api/build\.gradle$'; then
@@ -184,6 +256,9 @@ done
 
 if [ "$require_check" = true ]; then
   printf '기본 테스트 태스크: %s\n' "${module_tasks[*]}"
+  if requires_boot_test_exclusion; then
+    printf '제외 테스트: %s\n' "$excluded_boot_test"
+  fi
 else
   printf '기본 테스트 태스크: 없음\n'
   printf '주의: runbook 변경은 실제 명령, 엔드포인트, 설정 키, 기대 결과가 바뀐 경우에만 테스트를 강제한다.\n'
@@ -194,8 +269,7 @@ if [ "$run_mode" = true ]; then
     printf '[PASS] 자동 실행할 Gradle 테스트 태스크 없음\n'
     exit 0
   fi
-  printf 'Gradle 테스트 실행: ./gradlew %s\n' "${module_tasks[*]}"
-  ./gradlew "${module_tasks[@]}"
+  run_gradle_verification "${module_tasks[@]}"
   exit $?
 fi
 

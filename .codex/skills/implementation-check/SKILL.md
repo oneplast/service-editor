@@ -21,7 +21,7 @@ description: "코드 변경이나 계약 문서 변경 시 필요한 구현 검�
 4. `.codex/scripts/check-doc-implementation.sh --strict --scope-file <path>`를 실행해 현재 변경 세트가 구현 검증 대상인지 확인한다.
 5. scope 파일 경로만으로 followup 연결이 어려우면 `--followup-file <path>`를 함께 넘긴다.
 6. 코드 변경이나 계약 문서 변경이 `검증 대기` 단계에 들어가면 `.codex/scripts/verify-and-retry.sh --scope-file <path> --followup-file <path> --label <task>`로 테스트와 재검증 루프를 닫는다.
-7. 더 좁은 테스트가 부족하거나 여러 모듈이 얽히면 루트 `test`까지 올린다.
+7. 더 좁은 테스트가 부족하거나 여러 모듈이 얽히면 `.codex/config/doc-to-code-check-matrix.md`의 전체 테스트 기준까지 올린다.
 8. 결과는 같은 목표의 `prompts/worklog/**` Step에 짧게 남긴다.
 
 ## 자동 판별 기준

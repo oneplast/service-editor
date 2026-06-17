@@ -61,6 +61,12 @@
 
 이 경우 기본 태스크는 `test`다.
 
+### 자동 검증 제외 테스트
+
+- `.codex/scripts/check-doc-implementation.sh --run`은 `com.documents.api.resource.ResourceAccessAndLifecycleIntegrationTest`를 실행 대상에서 제외한다.
+- 이 테스트는 platform/resource lifecycle 연동 권한과 외부 패키지 구성이 필요하므로, 현재 저장소의 Codex 구현 검증 게이트에서 직접 해결 가능한 범위가 아니다.
+- 제외 범위는 `.codex` 로컬 검증 파이프라인에만 적용한다. 제품 코드, Gradle 테스트 정의, CI 워크플로는 이 예외 때문에 수정하지 않는다.
+
 ## 작업 유형별 원칙
 
 ### 코드 변경

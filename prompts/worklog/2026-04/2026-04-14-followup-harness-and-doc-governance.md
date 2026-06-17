@@ -103,3 +103,10 @@
 - 변경 내용: `main`에서 이미 `REQUIREMENTS`와 explainer에 반영된 document resource 경계의 누락 ADR로 `docs/decisions/022-keep-document-canonical-state-in-db-and-link-external-resources.md`를 추가했다.
 - 변경 내용: `docs/followup/000-active-task-template.md`의 빈 항목 trailing whitespace를 정리하고, `prompts/README.md`의 중복 요약 목록을 줄였다.
 - 판단: 공식 결정/검토 문서는 저장소에 남기고, 하네스는 README와 topic을 통해 필요한 문서만 좁혀 읽는 방식이 컨텍스트 최소화와 정합성 유지에 더 맞다.
+
+## Step 15. platform resource 테스트를 Codex 로컬 게이트에서 제외
+
+- 목적: 사용자가 해결할 수 없는 platform/resource lifecycle 권한 범위 테스트 때문에 `.codex` 검증 파이프라인 전체가 막히지 않게 한다.
+- 변경 내용: `.codex/scripts/check-doc-implementation.sh --run`이 루트 `test` 또는 `:documents-boot:test`를 실행할 때 `ResourceAccessAndLifecycleIntegrationTest`를 제외하고, 나머지 boot 통합 테스트를 명시 실행하도록 조정했다.
+- 변경 내용: `.codex/config/doc-to-code-check-matrix.md`, `.codex/README.md`, `.codex/skills/implementation-check/SKILL.md`에 로컬 구현 검증 제외 범위와 원본 위치를 반영했다.
+- 판단: 이 예외는 `.codex` 로컬 검증 파이프라인에만 적용하고, 제품 코드, Gradle 테스트 정의, CI/인프라 파일은 변경하지 않는다.
