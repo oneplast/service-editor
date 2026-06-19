@@ -29,16 +29,12 @@
 
 ## 현재 기준
 
-- `AGENTS.md`는 진입 규칙과 작업 절차를 담당한다.
-- 문서 전역 규칙은 `docs/README.md`가 담당한다.
-- 디렉토리별 상세 작성 기준은 각 경로 `README.md`가 담당한다.
-- `docs/discussions/`와 `docs/decisions/`는 컨텍스트 절약을 위해 삭제하는 경로가 아니라, 필요할 때 README와 관련 문서에서 따라가는 공식 근거 경로다.
-- 세션 복구와 진행 중 작업 handoff는 `docs/followup/`가 담당한다.
-- 문서 거버넌스와 구현 검증 경계는 `.codex/config/*`, `.codex/scripts/*`, 관련 runbook이 담당한다.
-- 원본 작업 로그는 `prompts/worklog/`, 주제별 탐색 문서는 `prompts/topics/`에서 관리한다.
-- 상세 운영 규칙은 이 topic에 다시 복제하지 않고, 위 관련 문서를 기준으로 본다.
+- `AGENTS.md`는 항상 적용되는 최상위 계약과 Direct, Scoped, Harness 작업 수준 및 독립 게이트를 담당한다.
+- 문서 전역 규칙과 디렉토리별 상세 기준은 `docs/README.md`와 각 경로 `README.md`가 담당한다.
+- README, skill, script, runbook, followup, prompts, subagent는 작업 조건에 맞는 게이트가 활성화될 때만 확장한다.
+- `prompts/`는 기본 읽기 대상에서 제외하고 기록, 같은 목표 재개, 과거 의도 복구가 필요할 때만 관련 파일 하나부터 확인한다.
+- 기존 규칙과 근거 경로는 유지하며, 상세 운영 규칙은 이 topic에 복제하지 않고 각 소유 문서를 기준으로 본다.
 
 ## 열어둘 질문
 
-- topic 문서의 `현재 기준`을 지금보다 더 짧게 제한할지 여부
 - `prompts/plans/`의 장기 유지 필요 여부

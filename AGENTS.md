@@ -1,7 +1,8 @@
 # AGENTS 가이드
 
 - 작업 성격에 맞는 공식 문서와 필요한 작업 기록만 함께 갱신한다.
-- `docs/` 하위 문서를 다룰 때는 항상 `AGENTS.md -> docs/README.md -> 경로상의 상위 README.md` 순서로 다시 확인한 뒤 반영한다.
+- `AGENTS.md`는 모든 작업에서 적용되는 최상위 계약으로 유지하고, 그 이후 문서와 자동화는 작업 수준과 게이트 조건에 따라 확장한다.
+- `docs/` 하위 문서를 생성하거나 수정하는 게이트가 활성화되면 `docs/README.md -> 경로상의 상위 README.md` 순서로 확인한 뒤 반영한다.
 - 문서 경로 분류와 디렉토리별 기준은 `docs/README.md`, `prompts/README.md`, 각 경로 `README.md`를 기준으로 판단한다.
 - 현재 유효한 제품 요구사항과 채택된 정책은 `docs/REQUIREMENTS.md`에 반영한다.
 - 문서 유형별 최종 경로 분류는 `docs/README.md`와 각 경로 `README.md`를 기준으로 판단한다.
@@ -45,21 +46,64 @@
 - 호출부만 봐도 검증, 조회, 수집, 변경 의도가 바로 읽혀야 하며, 조건식 의도가 흐리면 `validate...`, `ensure...`, `is...`, `has...`, `can...`처럼 역할이 드러나는 메서드로 감싼다.
 - 단순 수집 로직 때문에 순회 방식을 불필요하게 복잡하게 바꾸지 않고, 작은 처리 단위가 바뀌는 지점은 빈 줄과 들여쓰기로 읽기 단위를 드러낸다.
 
-## Harness Flow
+## Context And Harness Policy
 
-- 작업 전에는 필요한 규칙만 읽는다. 문서 작업이면 `AGENTS.md -> docs/README.md -> 대상 경로 README`, 코드 작업이면 `AGENTS.md -> 관련 모듈 구조 -> 같은 역할의 기존 파일` 순서로 확인한다.
-- 긴 작업, 여러 문서를 읽는 작업, 세션 재시작 위험이 큰 작업은 `docs/followup/active/<slug>.md`를 사용한다.
-- followup 상세 운영 규칙은 `docs/followup/README.md`를 따른다.
-- 반복 가능한 작업 시작 절차와 followup 갱신 절차는 `.codex/skills/`에 두고, 레포 규칙은 `AGENTS.md`와 `README.md` 계층에 남긴다.
-- 문서만 정리한 작업은 문서 거버넌스 검증만 수행해도 된다.
-- 코드 변경이 있거나 구현 의미를 바꾸는 문서(`docs/REQUIREMENTS.md`, `docs/guides/**`, `docs/decisions/**`, 실제 절차나 기대 결과가 바뀐 `docs/runbook/**`)를 고쳤다면 구현 검증을 함께 수행한다.
-- 구현 검증 기준은 `.codex/config/doc-to-code-check-matrix.md`, 절차는 `.codex/skills/implementation-check/SKILL.md`, 자동 판별은 `.codex/scripts/check-doc-implementation.sh`를 따른다.
-- 검증 스크립트는 가능하면 현재 작업 범위 파일만 대상으로 돌린다. 긴 작업에서는 followup이 가리키는 scope 파일이나 명시 입력을 먼저 고정하고, scope가 없을 때만 `git status` 전체를 마지막 fallback으로 사용한다.
-- 코드/계약 변경이 있는 긴 작업은 followup `현재 상태`에 `검증 단계`를 함께 적는다. `진행 중` 단계에서는 필요할 때만 컴파일, 아주 좁은 테스트, sanity check를 선택하고, `검증 대기` 단계가 되면 `verify-and-retry` 경로로 PASS를 닫는다.
-- 코드/계약 변경이 있는 작업은 `verify-and-retry` 경로로 PASS를 닫기 전까지 완료로 판단하지 않는다. 문서 거버넌스 검증만 통과한 상태는 완료가 아니다.
-- 검증에서 `FAIL`이 나오면 완료로 판단하지 않는다. 실패 원인을 수정한 뒤 같은 검증을 다시 실행해 `PASS`로 바뀐 것을 확인해야 한다.
-- 검증 재시도는 `.codex/scripts/verify-and-retry.sh`와 `.codex/skills/verification-retry/SKILL.md`를 따른다.
-- 관련 작업을 시작할 때 현재 축의 runbook이 있으면 먼저 읽고, 같은 실패 축이 확인되면 관련 runbook 파일에 바로 케이스를 남겨 다음 작업에서 예방에 사용한다.
+### 기본 원칙
+
+- 항상 가장 작은 충분 컨텍스트로 시작한다.
+- `AGENTS.md` 이후의 README, 공식 근거 문서, skill, config, script, runbook, followup, prompts, subagent를 자동으로 전부 열지 않는다.
+- 작업 난이도, 변경 범위, 실패 비용, 불확실성을 기준으로 필요한 게이트만 활성화한다.
+- 작업 중 새로운 위험 신호가 확인되면 필요한 게이트를 추가로 활성화한다.
+- 규칙을 읽지 않는 것과 규칙을 무시하는 것을 구분한다. 작업이 특정 경로에 진입하면 그 경로 README의 전역·디렉토리 규칙을 적용한다.
+
+### 작업 수준
+
+- `Direct`
+  - 설명, 단순 질의, 상태 확인처럼 추가 저장소 컨텍스트나 변경이 필요 없는 작업
+  - 사용자 요청만으로 답할 수 있으면 README, skill, script, runbook, prompts를 추가로 열지 않는다.
+- `Scoped`
+  - 특정 파일, 모듈, 문서 경로처럼 범위가 명확한 탐색·수정 작업
+  - 지정 범위, 직접 관련 파일, 같은 역할의 기존 파일, 인접 테스트와 해당 경로 README까지만 확장한다.
+- `Harness`
+  - 문서 체계·정책·계약 변경, 여러 모듈 또는 여러 문서 경로 변경, 장기 작업, 세션 복구, 검증 실패처럼 실패 비용이 큰 작업
+  - 아래 독립 게이트 중 실제 필요한 것만 조합한다. `Harness` 진입이 전체 파이프라인 실행을 뜻하지 않는다.
+
+애매한 작업은 `Scoped`로 시작한다. 정책, 계약, 검증, 복구, 장기 상태 관리가 필요하다는 신호가 확인되면 `Harness`로 승격한다.
+
+### 독립 게이트
+
+- `path-rule`
+  - 특정 모듈이나 문서 경로를 수정할 때 해당 경로 README와 같은 역할의 기존 파일을 확인한다.
+- `docs-routing`
+  - `docs/` 문서를 생성·수정하거나 문서 분류를 판단할 때 `docs/README.md`와 대상 경로 README를 확인한다.
+- `requirements`
+  - 제품 동작, 외부 계약, 채택 정책이 바뀌거나 현재 기준 확인이 필요할 때만 `docs/REQUIREMENTS.md`와 관련 공식 근거를 확인한다.
+- `skill`
+  - 반복 가능한 절차의 발동 조건을 만족할 때만 해당 `SKILL.md`를 읽는다. skill을 읽었다는 이유만으로 관련 script를 자동 실행하지 않는다.
+- `script`
+  - 자동 판별이나 검증이 실제로 필요할 때만 관련 config와 script를 읽고 실행한다.
+- `implementation-verification`
+  - 코드 또는 구현 의미를 바꾸는 계약 변경이 있을 때 범위에 맞는 구현 검증을 수행한다.
+- `doc-governance`
+  - 문서 체계, 규칙 소유 위치, README, 템플릿, 문서 작업 절차를 바꿀 때 문서 거버넌스 검증을 수행한다.
+- `verification-retry`
+  - 검증에서 실제 `FAIL`이 발생한 뒤에만 수정·재검증 절차를 활성화한다.
+- `runbook`
+  - 관련 실패·반복 실수·복구 신호가 있거나 작업이 현재 runbook의 예방 체크포인트를 직접 요구할 때만 해당 축 파일 하나를 읽는다.
+- `followup`
+  - 여러 단계 작업, 긴 컨텍스트, 세션 중단 위험, 복잡한 검증 상태가 있을 때만 현재 상태와 scope를 유지한다.
+- `prompts`
+  - 기본 읽기 게이트는 `OFF`다. prompts 자체를 수정하거나, 같은 목표를 이어받거나, 공식 문서와 코드만으로 과거 의도를 확정할 수 없을 때 관련 파일 하나부터 읽는다.
+- `subagent`
+  - 독립적인 bounded task로 나눌 수 있고 중복 컨텍스트 비용보다 탐색·검증 이득이 클 때만 활성화한다. 최초 게이트 판정, 결과 통합, 최종 완료 선언은 메인 에이전트가 소유한다.
+
+### 검증과 완료
+
+- 검증은 현재 작업 scope를 우선하고, scope가 없을 때만 `git status` 전체를 마지막 fallback으로 사용한다.
+- 문서만 정리한 작업은 필요한 문서 검증만 수행하고 구현 검증을 자동으로 강제하지 않는다.
+- 코드 변경이나 구현 의미를 바꾸는 문서 변경은 관련 구현 검증을 수행한다.
+- 검증에서 `FAIL`이 나오면 완료로 판단하지 않는다. 실패 원인을 수정하고 같은 검증이 `PASS`로 바뀐 것을 확인한다.
+- 코드나 계약 변경이 있는 긴 작업은 followup에 검증 단계를 유지하되, 구현 중에는 필요한 최소 검증만 선택하고 검증 대기 단계에서 최종 PASS를 닫는다.
 
 ## Lightweight Flow
 

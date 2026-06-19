@@ -53,7 +53,9 @@
 
 ## 읽기 기준
 
-- 문서 작업에서는 `AGENTS.md -> docs/README.md -> 대상 경로 README -> 실제 대상 문서` 순서로 최소 경로만 읽는다.
+- `docs/README.md`는 모든 작업의 기본 컨텍스트가 아니라 `docs-routing` 게이트가 활성화됐을 때 사용하는 문서 전역 기준과 경로 라우터다.
+- `docs/` 문서를 생성·수정하거나 문서 분류가 필요한 작업에서는 `AGENTS.md -> docs/README.md -> 대상 경로 README -> 실제 대상 문서` 순서로 최소 경로만 읽는다.
+- 코드 작업, 단순 질의, 상태 확인처럼 문서 경로 판단이 필요 없는 작업에서는 이 문서를 관성적으로 읽지 않는다.
 - 실제 대상 문서는 현재 작업을 직접 제약하는 것만 읽는다.
   - 요구사항이면 `docs/REQUIREMENTS.md`
   - 채택된 결정이면 관련 ADR
@@ -62,6 +64,7 @@
   - 구조 설명이면 관련 explainer
   - 세션 복구면 관련 followup 파일
 - 작업과 직접 관련 없는 하위 README나 문서를 관성적으로 넓게 읽지 않는다.
+- `docs/discussions/`, `docs/decisions/`는 관련 결정과 충돌하거나 정책·계약 판단이 필요할 때만 좁게 따라간다.
 - 문서 체계 검증은 `.codex/scripts/check-doc-governance.sh`, 구현 검증 필요 여부 판별은 `.codex/scripts/check-doc-implementation.sh`, 실패 재시도와 실패 케이스 기록은 `.codex/scripts/verify-and-retry.sh`를 기준으로 본다.
 
 ## Markdown 가독성 규칙
