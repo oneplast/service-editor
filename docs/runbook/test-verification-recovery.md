@@ -2,27 +2,28 @@
 
 ## 언제 읽는가
 
-- 구현 검증, 테스트, Gradle 설정, `verify-and-retry` 작업을 시작하기 전에
-- 구현 검증에서 테스트 실패가 반복될 때
-- Gradle 모듈 테스트 선택이 흔들릴 때
-- 세션이 끊겼다가 다시 시작해 현재 검증 단계와 범위를 다시 맞춰야 할 때
-- 코드 변경 이후 어떤 테스트를 다시 돌려야 할지 애매할 때
+- 구현 검증이나 테스트에서 실제 실패가 발생했을 때
+- 같은 테스트 실패가 반복되거나 원인 수정 후에도 PASS로 닫히지 않을 때
+- Gradle 모듈 테스트 선택 오류가 확인되거나 범위를 반복해서 다시 고를 때
+- 세션 재개 후 followup만으로 실패 상태, 검증 단계, 범위를 확정할 수 없을 때
 - 빌드 설정 변경이나 모듈 경계 변경 뒤 검증이 실패할 때
+
+정상적인 구현 검증, 테스트, Gradle 작업을 시작한다는 이유만으로 선행 로드하지 않는다.
 
 ## 먼저 다시 볼 원문
 
-- `.codex/config/doc-to-code-check-matrix.md`
-- `.codex/config/failure-route-map.md`
-- `.codex/skills/implementation-check/SKILL.md`
-- `.codex/skills/verification-retry/SKILL.md`
-- `.codex/scripts/check-doc-implementation.sh`
-- `.codex/scripts/verify-and-retry.sh`
+- 현재 실패와 직접 관련된 검증 출력
+- 테스트 범위 오류면 `.codex/config/doc-to-code-check-matrix.md`
+- 재시도 실패면 `.codex/skills/verification-retry/SKILL.md`
+- 실패 라우팅 문제면 `.codex/config/failure-route-map.md`
+- 세션 복구 중이면 현재 followup과 scope
 
 ## 작업 전 체크포인트
 
-- 변경 경로와 관련 모듈을 먼저 적었는가
+- 현재 실패나 흔들림의 증상을 한 문장으로 고정했는가
+- 변경 경로와 관련 모듈을 적었는가
 - 계약 문서 변경이면 구현 경로와 테스트를 같은 세트로 보고 있는가
-- `--strict`로 구현 검증 필요 여부를 먼저 확인했는가
+- 최초 실패를 만든 검증 명령과 출력을 확인했는가
 - followup이 있으면 `검증 단계`가 `검증 대기`인지 확인했는가
 - 세션 재개라면 followup의 `현재 상태`, `.scope`, `검증 단계`를 먼저 다시 읽었는가
 

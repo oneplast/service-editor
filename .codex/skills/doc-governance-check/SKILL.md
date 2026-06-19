@@ -9,10 +9,12 @@ description: "문서 체계나 규칙 변경 뒤 최신화 대상과 제외 대�
 
 ## 사용할 때
 
-- `AGENTS.md`, `docs/README.md`, 하위 `README.md`, 템플릿, `.codex/skills/`를 함께 건드린 작업
 - 문서 체계나 규칙을 바꾼 작업
+- 규칙 소유 위치, README 계층, 템플릿, 문서 작업 절차를 바꾼 작업
 - followup, runbook, prompts topic 경계를 조정한 작업
 - 반복 에러를 기존 runbook에 새 케이스로 반영한 작업
+
+일반 문서 본문, 오타, 링크, 표현만 정리한 작업에는 사용하지 않는다.
 
 ## 절차
 

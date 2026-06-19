@@ -32,6 +32,7 @@
 - `AGENTS.md`는 항상 적용되는 최상위 계약과 Direct, Scoped, Harness 작업 수준 및 독립 게이트를 담당한다.
 - 문서 전역 규칙과 디렉토리별 상세 기준은 `docs/README.md`와 각 경로 `README.md`가 담당한다.
 - README, skill, script, runbook, followup, prompts, subagent는 작업 조건에 맞는 게이트가 활성화될 때만 확장한다.
+- followup은 복구할 상태가 있는 긴 작업에만 사용하고, runbook은 실패·반복 실수·복구 신호가 있을 때만 읽는다.
 - `prompts/`는 기본 읽기 대상에서 제외하고 기록, 같은 목표 재개, 과거 의도 복구가 필요할 때만 관련 파일 하나부터 확인한다.
 - 기존 규칙과 근거 경로는 유지하며, 상세 운영 규칙은 이 topic에 복제하지 않고 각 소유 문서를 기준으로 본다.
 

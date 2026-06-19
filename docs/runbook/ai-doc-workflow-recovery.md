@@ -2,27 +2,25 @@
 
 ## 언제 읽는가
 
-- 문서 체계, README, topic, followup, `.codex` 절차를 수정하기 전에
 - 문서 작업에서 같은 실수가 반복될 때
 - 세션이 길어지면서 문서 읽기 순서나 경로 판단이 흔들릴 때
 - 세션이 끊겼다가 다시 시작해 현재 작업과 제약을 다시 맞춰야 할 때
 - followup 없이 긴 작업을 진행해 복구 비용이 커졌을 때
 - 어떤 문서를 먼저 읽어야 하는지 판단이 흐려졌을 때
 
+문서 체계, README, topic, followup, `.codex` 절차를 수정한다는 이유만으로 선행 로드하지 않는다.
+
 ## 먼저 다시 볼 원문
 
 - `AGENTS.md`
-- `docs/README.md`
-- 대상 경로 `README.md`
-- `prompts/README.md`
-- `prompts/topics/README.md`
-- `docs/followup/README.md`
-- `.codex/config/doc-update-matrix.md`
+- 현재 증상과 직접 관련된 README 또는 원문 문서
+- 세션 복구 중이면 현재 followup 파일
+- 반복 검증 실패면 관련 config 또는 script
 
 ## 작업 전 체크포인트
 
-- 문서 성격을 먼저 한 문장으로 적고 경로를 정했는가
-- `AGENTS.md -> docs/README.md -> 대상 경로 README` 순서로 읽었는가
+- 현재 실패나 흔들림의 증상을 한 문장으로 고정했는가
+- 문서 수정 작업이면 `AGENTS.md -> docs/README.md -> 대상 경로 README` 순서로 읽었는가
 - topic에는 링크와 짧은 현재 기준만 남기고 있는가
 - 전역 규칙을 하위 README, 템플릿, skill에 다시 복제하지 않았는가
 - 긴 작업이면 followup과 scope를 먼저 고정했는가
@@ -43,7 +41,7 @@
 - 증상: 대상 문서만 바로 열고 수정한다.
 - 원인: 문서 읽기 순서를 작업 시작 전에 다시 고정하지 않았다.
 - 복구: `AGENTS.md -> docs/README.md -> 대상 경로 README -> 대상 문서` 순서로 다시 읽는다.
-- 방지: 문서 작업 시작 시 `.codex/skills/docs-task-start/SKILL.md` 절차를 먼저 따른다.
+- 방지: `docs-routing` 게이트가 활성화된 문서 생성·수정 작업에서 `.codex/skills/docs-task-start/SKILL.md` 절차를 따른다.
 
 ### 2. 문서 경로 오분류
 
@@ -57,7 +55,7 @@
 - 증상: 여러 단계 작업인데 현재 상태 문서가 없다.
 - 원인: 긴 작업으로 바뀌는 시점을 followup 생성 트리거로 인식하지 못했다.
 - 복구: `docs/followup/000-active-task-template.md`로 `active/<slug>.md`를 만들고 목표, 고정 제약, 읽은 기준 문서, 현재 파일 범위, 현재 상태, 다음 작업만 적는다.
-- 방지: 기준 문서가 2개 이상으로 늘어나거나 턴을 넘길 가능성이 생기면 바로 followup을 만든다.
+- 방지: 여러 턴을 넘기거나 목표, 제약, scope, 검증 상태의 복구 위험이 생기면 followup을 만든다.
 
 ### 4. 인덱스 문서 과적재
 

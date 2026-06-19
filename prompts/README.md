@@ -32,6 +32,7 @@
 - 과거 worklog나 topic은 현재 요구사항이나 채택 정책으로 자동 승격하지 않는다.
 - 현재 사용자 요청, `docs/REQUIREMENTS.md`, 관련 공식 문서와 코드가 prompts 기록보다 우선한다.
 - 디렉토리 전체를 관성적으로 읽지 않고, 현재 목표와 직접 연결된 topic 또는 worklog 하나부터 확인한다.
+- prompts 기록을 확인했다는 이유만으로 followup이나 runbook 게이트를 함께 활성화하지 않는다.
 
 ## 작업 로그 운영 원칙
 

@@ -1,6 +1,6 @@
 # Runbook 운영 메모
 
-이 디렉토리는 장애, 오류, 설정 문제, 반복 실수 축에서 작업 전에 먼저 읽는 예방·점검·복구 문서를 보관한다.
+이 디렉토리는 장애, 오류, 설정 문제, 반복 실수 축에서 실패·복구 신호가 확인됐을 때 읽는 예방·점검·복구 문서를 보관한다.
 
 ## 무엇을 여기에 두는가
 
@@ -25,12 +25,12 @@
 
 ## 선택 기준
 
-- 문서 작업이나 AI 작업에서 문서 체계, followup, topic, `.codex` 절차를 건드릴 때는 [docs/runbook/ai-doc-workflow-recovery.md](https://github.com/jho951/Block-server/blob/dev/docs/runbook/ai-doc-workflow-recovery.md)를 먼저 읽는다.
-- 구현 검증, 테스트, Gradle 빌드, `verify-and-retry` 계열 작업을 할 때는 [docs/runbook/test-verification-recovery.md](https://github.com/jho951/Block-server/blob/dev/docs/runbook/test-verification-recovery.md)를 먼저 읽는다.
+- 문서 체계, followup, topic, `.codex` 작업에서 읽기 순서, 경로 분류, 규칙 중복, 복구 상태가 흔들릴 때 [docs/runbook/ai-doc-workflow-recovery.md](https://github.com/jho951/Block-server/blob/dev/docs/runbook/ai-doc-workflow-recovery.md)를 읽는다.
+- 구현 검증, 테스트, Gradle 빌드에서 실제 실패가 발생했거나 알려진 반복 실패의 예방 체크포인트가 직접 필요할 때 [docs/runbook/test-verification-recovery.md](https://github.com/jho951/Block-server/blob/dev/docs/runbook/test-verification-recovery.md)를 읽는다.
 - 장애 재현, 설정 오류, 환경 점검처럼 기능 또는 환경 자체를 다시 확인해야 하는 경우에는 해당 문제 유형 runbook만 추가로 읽는다.
 - runbook 전체를 넓게 읽지 않고, 현재 증상과 직접 연결된 파일 하나를 먼저 읽는 것을 기본 원칙으로 한다.
-- 정상 작업에서는 `작업 전 체크포인트`만 먼저 보고, 검증 직전이나 작업이 흔들릴 때만 `검증/자기점검 때 볼 분기`와 `반복 실수/실패 사례`로 내려간다.
-- 세션이 끊겼다가 다시 시작하는 경우에도 관련 runbook을 다시 열고 `작업 전 체크포인트`부터 보며, 현재 작업 상태는 `docs/followup/active/*.md`와 함께 맞춰 본다.
+- 정상 작업에서는 runbook을 선행 로드하지 않는다.
+- 세션 재개 시에는 followup으로 현재 상태를 먼저 맞추고, 실패·복구 신호가 남아 있을 때만 관련 runbook으로 분기한다.
 - 반복 실수 분기와 검증 실패 기록 절차는 관련 skill/script를 따른다.
 
 ## 반복 케이스 반영 기준

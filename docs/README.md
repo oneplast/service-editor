@@ -65,6 +65,7 @@
   - 세션 복구면 관련 followup 파일
 - 작업과 직접 관련 없는 하위 README나 문서를 관성적으로 넓게 읽지 않는다.
 - `docs/discussions/`, `docs/decisions/`는 관련 결정과 충돌하거나 정책·계약 판단이 필요할 때만 좁게 따라간다.
+- followup과 runbook은 문서 작업의 기본 경로가 아니며, 세션 복구 또는 실패·반복 실수 신호가 있을 때만 해당 README와 대상 파일로 분기한다.
 - 문서 체계 검증은 `.codex/scripts/check-doc-governance.sh`, 구현 검증 필요 여부 판별은 `.codex/scripts/check-doc-implementation.sh`, 실패 재시도와 실패 케이스 기록은 `.codex/scripts/verify-and-retry.sh`를 기준으로 본다.
 
 ## Markdown 가독성 규칙

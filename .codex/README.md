@@ -13,3 +13,4 @@
 - 검증 실패 재검증과 실패 케이스 즉시 기록은 `.codex/config/failure-route-map.md`, `.codex/scripts/verify-and-retry.sh`, `.codex/skills/verification-retry/SKILL.md`를 기준으로 한다.
 - 구현 검증의 경로별 태스크와 로컬 제외 테스트는 `.codex/config/doc-to-code-check-matrix.md`를 원본으로 본다.
 - 실제 skill 활성화 조건, config 판별 범위, script 실행 게이트는 각 파일이 소유하며 후속 변경 시 서로 중복해 선언하지 않는다.
+- 문서·복구 skill은 단순 작업에서 자동 활성화하지 않고, 각 `SKILL.md`의 `사용할 때` 조건을 만족할 때만 사용한다.
