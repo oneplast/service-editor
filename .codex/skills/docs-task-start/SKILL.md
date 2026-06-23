@@ -5,7 +5,9 @@ description: "docs-routing 게이트가 활성화된 문서 생성·수정 작�
 
 # Docs Task Start
 
-이 skill은 `docs-routing` 게이트가 활성화된 문서 생성·수정 작업에서 최소한의 문서만 읽고 올바른 경로로 분기하기 위한 절차다.
+이 skill은 직접 문서 수정 요청이나 `DOC_REQUIRED` 판정으로 `docs-routing`과 `doc-update`가 활성화됐을 때, 최소한의 문서만 읽고 올바른 경로로 분기하기 위한 절차다.
+
+이 skill은 코드·설정 변경의 문서 영향을 판정하지 않는다. `doc-impact`가 `DOC_REQUIRED`로 확정된 뒤 필요한 문서를 찾고 갱신하는 절차를 담당한다.
 
 ## 사용할 때
 
@@ -17,19 +19,22 @@ description: "docs-routing 게이트가 활성화된 문서 생성·수정 작�
 
 ## 절차
 
-1. `AGENTS.md`에서 `docs-routing` 게이트가 필요한 작업인지 확정한다.
+1. 직접 문서 수정 요청인지, 또는 `doc-impact`가 `DOC_REQUIRED`로 확정됐는지 확인한다.
 2. `docs/README.md`를 읽고 문서 성격과 대상 경로를 분류한다.
 3. 대상 경로로 내려가며 필요한 상위 `README.md`만 읽는다.
 4. 실제 본문 문서는 현재 작업을 직접 제약하는 것만 읽는다.
-5. 문서 체계나 규칙을 바꾸는 작업이면 관련 README, 템플릿, worklog를 함께 갱신하고, topic은 링크와 짧은 현재 기준만 보강한다.
-6. 작업이 여러 단계로 이어지거나 세션 복구 위험이 확인되면 그때 `followup-handoff`로 승격한다.
-7. 읽기 순서, 경로 분류, 규칙 중복 같은 실패·이상 징후가 확인되면 그때 `runbook-trigger`로 승격한다.
-8. 문서 체계나 규칙을 바꿨다면 마지막에 `doc-governance-check`로 승격한다.
+5. 문서 체계나 규칙을 바꾸는 작업이면 메인이 확정한 동반 갱신 대상을 반영한다. prompts 게이트가 활성화된 경우에만 worklog와 topic을 갱신한다.
+6. 작업이 여러 단계로 이어지거나 세션 복구 위험이 확인되면 `followup` 필요 신호를 메인 에이전트에 반환한다.
+7. 읽기 순서, 경로 분류, 규칙 중복 같은 실패·이상 징후가 확인되면 `runbook` 필요 신호를 메인 에이전트에 반환한다.
+8. 문서 체계나 규칙 변경이 확인되면 `doc-governance` 필요 신호를 메인 에이전트에 반환한다.
 
 ## 하지 말 것
 
 - 관련 없는 하위 README를 관성적으로 넓게 읽지 않는다.
 - 문서 작업이라는 이유만으로 followup, runbook, prompts, config, script를 모두 열지 않는다.
+- `DOC_NONE`인 코드·설정 변경에서 이 skill을 활성화하지 않는다.
+- 이 skill 안에서 `doc-impact`를 다시 판정하거나 `doc-governance`를 자동 활성화하지 않는다.
+- followup, runbook, prompts 등 다른 독립 게이트를 직접 활성화하거나 해당 skill을 연쇄 실행하지 않는다.
 - 전역 규칙을 하위 README나 템플릿에 다시 복제하지 않는다.
 - worklog를 현재 기준 문서처럼 덮어쓰지 않는다.
 - topic을 공식 규칙 축약본처럼 키우지 않는다.

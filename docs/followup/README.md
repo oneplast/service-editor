@@ -27,7 +27,8 @@
 - 관련 없는 여러 작업을 한 파일에 섞지 않는다.
 - 다음 세션에서 이 파일 하나만 읽어도 바로 재개할 수 있어야 한다.
 - 반복 절차가 필요하면 [`.codex/skills/followup-handoff/SKILL.md`](https://github.com/jho951/Block-server/blob/dev/.codex/skills/followup-handoff/SKILL.md)를 따른다.
-- 공식 문서 최신화 검증은 [`.codex/config/doc-update-matrix.md`](https://github.com/jho951/Block-server/blob/dev/.codex/config/doc-update-matrix.md)와 `.codex/scripts/check-doc-governance.sh`를 따른다.
+- 문서 영향 판정과 공식 문서 갱신 대상은 [`.codex/config/doc-update-matrix.md`](https://github.com/jho951/Block-server/blob/dev/.codex/config/doc-update-matrix.md)를 따른다.
+- `.codex/scripts/check-doc-governance.sh`는 문서 체계·규칙·workflow 계약을 바꾼 작업에서만 사용한다.
 - 작업 범위 검증이 필요하면 `.codex/scripts/*.sh --scope-file <path>` 형태로 현재 작업 파일 목록을 넘긴다.
 - scope 파일 경로가 표준 형태가 아니거나 followup 파일을 명시해야 하면 `.codex/scripts/*.sh --followup-file <path>`를 함께 넘긴다.
 - 코드/계약 변경 작업은 `현재 상태`에 `검증 단계: 진행 중` 또는 `검증 단계: 검증 대기`를 적는다.
