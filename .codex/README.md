@@ -27,3 +27,9 @@
 - `AGENTS.md`는 게이트 존재와 상위 활성화 원칙, README는 경로 규칙, config는 세부 판정 기준, skill은 실행 절차, script는 입력·출력과 기계적 실행을 소유한다.
 - 하위 파일은 상위 원칙을 다시 정의하지 않고, 자신의 역할에 필요한 세부 계약만 둔다.
 - 문서·복구 skill은 단순 작업에서 자동 활성화하지 않고, 각 `SKILL.md`의 `사용할 때` 조건을 만족할 때만 사용한다.
+
+## Scripts
+
+- script 상세 입출력과 예시는 `.codex/scripts/README.md`를 기준으로 본다.
+- 공통 게이트 상태와 재개 계약은 `.codex/config/gate-state-contract.md`를 기준으로 본다.
+- script를 실제로 실행하거나 옵션을 확인해야 할 때만 `.codex/scripts/README.md`와 대상 script를 읽는다.

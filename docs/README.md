@@ -70,7 +70,7 @@
 - 코드·설정 변경의 문서 영향이 `DOC_REQUIRED`일 때만 이 문서로 진입해 영향받는 공식 문서를 찾는다. `DOC_NONE`이면 문서 최신화를 위한 추가 읽기를 하지 않는다.
 - 제품 문서 최신화와 문서 체계 검증은 별도 게이트다. 요구사항·계약 문서만 갱신하는 작업을 문서 체계 변경으로 자동 승격하지 않는다.
 - 이 문서는 `DOC_REQUIRED` 판정 뒤 `docs-routing`과 `doc-update`에 사용한다. 코드·설정 변경의 문서 영향을 판정하거나 `doc-update`를 활성화하는 역할은 맡지 않는다.
-- 문서 체계 검증은 `.codex/scripts/check-doc-governance.sh`, 구현 검증 필요 여부 판별은 `.codex/scripts/check-doc-implementation.sh`, 실패 재시도와 실패 케이스 기록은 `.codex/scripts/verify-and-retry.sh`를 기준으로 본다.
+- 문서 체계 검증은 `.codex/scripts/check-doc-governance.sh`, 구현 검증 계획과 실행은 `.codex/scripts/check-doc-implementation.sh`, 실제 실패 뒤 선택적 재시도는 `.codex/scripts/verify-and-retry.sh`를 기준으로 본다.
 
 ## Markdown 가독성 규칙
 

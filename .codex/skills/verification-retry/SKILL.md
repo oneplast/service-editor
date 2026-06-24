@@ -23,10 +23,11 @@ description: "검증 실패 정보를 이어받아 수정과 동일 검증 재�
 6. 실패 원인을 고친다.
 7. 수정 diff와 선행 `PASS`의 입력·scope·직접 의존 대상을 비교해 영향받은 `PASS` 후보를 계산한다.
 8. 영향이 명확한 `PASS`만 무효화하고, 영향받지 않은 `PASS`는 재사용한다. 영향 범위가 불명확하면 `UNCLASSIFIED`와 최소 추가 확인 대상을 메인 에이전트에 반환한다.
-9. 무효화된 선행 검증을 필요한 순서로 실행한 뒤 실패 지점의 동일 검증을 다시 실행한다.
-10. 재검증이 `PASS`이면 중단된 게이트의 재개 지점으로 반환하고, 다시 `FAIL`이면 갱신된 실패 정보와 현재 유효한 `PASS` 정보를 반환한다.
-11. 메인이 runbook 게이트와 실패 축을 확정한 경우에만 관련 기존 runbook에 케이스를 추가한다.
-12. 실패 축이 애매하면 새 runbook 파일을 자동 생성하지 않고 `UNCLASSIFIED`와 후보 안을 메인 에이전트에 반환한다.
+9. `.codex/scripts/verify-and-retry.sh --failure-file <fail-state> --pass-state <pass-state> --scope-file <scope> --dry-run`으로 재사용·재검증 대상을 확인한다.
+10. `--dry-run`을 제거해 무효화된 선행 검증을 필요한 순서로 실행한 뒤 실패 지점의 동일 검증을 다시 실행한다.
+11. 재검증이 `PASS`이면 중단된 게이트의 재개 지점으로 반환하고, 다시 `FAIL`이면 갱신된 실패 정보와 현재 유효한 `PASS` 정보를 반환한다.
+12. 메인이 runbook 게이트와 실패 축을 확정한 경우에만 `--runbook-approved <path>`로 관련 기존 runbook에 케이스를 추가한다.
+13. 실패 축이 애매하면 새 runbook 파일을 자동 생성하지 않고 `UNCLASSIFIED`와 후보 안을 메인 에이전트에 반환한다.
 
 ## 하지 말 것
 

@@ -22,9 +22,9 @@ description: "코드 변경이나 계약 문서 변경 시 필요한 구현 검�
 3. 변경 성격 입력이 없거나 scope·diff와 어긋나면 `.codex/config/gate-state-contract.md` 형식으로 `UNCLASSIFIED`를 반환하고 구현 검증 완료를 보류한다.
 4. `.codex/config/doc-to-code-check-matrix.md`에서 변경 성격별 게이트와 기본 테스트 단위를 확인한다.
 5. followup 파일이 있으면 `현재 상태`의 `검증 단계`를 확인한다. `진행 중`이면 필요한 컴파일, 좁은 테스트, sanity check만 고른다.
-6. 가능하면 scope와 구현 변경 성격을 명시해 `.codex/scripts/check-doc-implementation.sh --strict`를 실행한다.
+6. scope와 구현 변경 성격을 명시해 `.codex/scripts/check-doc-implementation.sh --change-kind <kind> --dry-run`으로 최소 테스트 계획을 확인한다.
 7. scope 파일 경로만으로 followup 연결이 어려우면 `--followup-file <path>`를 함께 넘긴다.
-8. 구현 검증 대상이 `검증 대기` 단계에 들어가면 선택한 구현 검증을 최초 한 번 실행한다.
+8. 구현 검증 대상이 `검증 대기` 단계에 들어가면 `--run --result-file docs/followup/active/.state/<task>-implementation.state`로 선택한 구현 검증을 최초 한 번 실행한다.
 9. `PASS`이면 구현 검증 게이트를 닫고, `FAIL`이면 `.codex/config/gate-state-contract.md`의 실패 정보를 메인 에이전트에 반환한다. 이 skill에서 `verification-retry`나 `runbook`을 직접 활성화하지 않는다.
 10. 더 좁은 테스트가 부족하거나 여러 모듈이 얽히면 matrix의 전체 테스트 기준까지 올린다.
 11. 같은 목표의 worklog가 이미 활성화됐거나 팀·프로젝트 단위의 의미 있는 기록이 필요한 작업에서만 검증 결과를 해당 Step에 짧게 남긴다.

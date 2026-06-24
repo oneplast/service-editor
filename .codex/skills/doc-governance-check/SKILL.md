@@ -25,7 +25,7 @@ description: "문서 체계나 규칙 변경 뒤 최신화 대상과 제외 대�
 1. 관련 파일 변경을 마친다.
 2. 메인 에이전트가 확정한 변경 성격이 `doc-governance-change` 또는 `workflow-contract-change`인지 확인한다. 입력과 scope·diff가 어긋나면 `.codex/config/gate-state-contract.md` 형식으로 `UNCLASSIFIED`를 반환한다.
 3. `.codex/config/doc-update-matrix.md`에서 해당 게이트의 최신화 기준과 편집 모드를 확인한다.
-4. 가능하면 scope와 확정한 변경 성격을 명시해 `.codex/scripts/check-doc-governance.sh`를 실행한다.
+4. scope와 확정한 변경 성격을 `--scope-file`, `--change-kind`로 명시해 `.codex/scripts/check-doc-governance.sh`를 실행한다. 긴 작업이면 `--result-file`을 `docs/followup/active/.state/`에 둔다.
 5. 스크립트 출력에서 빠진 동반 문서나 금지 경로 참조가 있으면 해당 파일을 다시 고친다.
 6. 코드 변경이나 구현 의미를 바꾸는 문서 변경이 확인되면 구현 검증 필요 신호를 메인 에이전트에 반환한다.
 7. 스크립트가 통과해도 메인 에이전트 또는 사람이 요구사항 변경 여부, discussion/ADR 필요 여부, 같은 주제/같은 결정 여부를 마지막으로 확인한다.

@@ -96,3 +96,39 @@
 - `bash .codex/scripts/check-doc-implementation.sh --scope-file docs/followup/active/conditional-harness-transition.scope --followup-file docs/followup/active/conditional-harness-transition.md`
 - 구현 의미 변경 문서가 없어 구현 검증 불필요 확인
 - `git diff --check` PASS
+
+## Step 4. 검증 스크립트 독립 조건부 게이트 전환
+
+### 목적
+
+- 3단계에서 정의한 게이트 판별과 재개 계약을 실제 shell script 입력·출력과 실행 흐름에 반영한다.
+
+### 변경 내용
+
+- 문서 거버넌스와 구현 검증 script가 메인이 확정한 `--change-kind`와 scope를 별도 입력으로 받도록 변경했다.
+- 후보 경로가 있지만 변경 성격이 없으면 경로로 자동 확정하지 않고 `UNCLASSIFIED`를 반환하도록 했다.
+- 구현 검증의 계획 확인과 실제 테스트 실행을 `--dry-run`, `--run`으로 분리했다.
+- 게이트 결과를 `docs/followup/active/.state/`에 저장하고 직접 의존 파일 해시와 경로 패턴으로 PASS 재사용 여부를 판정하도록 했다.
+- `verify-and-retry`가 최초 검증을 다시 실행하거나 두 게이트를 일괄 실행하지 않고, 전달받은 실패 게이트와 영향받은 선행 PASS만 재실행하도록 변경했다.
+- runbook은 자동 기록하지 않고 메인이 축을 확정해 `--runbook-approved`를 전달한 경우에만 기록하도록 했다.
+- script 파일을 직접 실행할 수 있도록 실행 권한을 적용했다.
+- runbook 진입 뒤에도 전체 문서를 먼저 읽지 않도록 `빠른 진입점` 기준을 추가했다.
+- script 상세 입출력과 예시는 `.codex/scripts/README.md`로 분리하고, `.codex/README.md`는 `.codex` 경로 라우팅만 남기도록 정리했다.
+
+### 판단
+
+- scope 전체 fingerprint만 비교하면 무관한 파일 추가에도 모든 PASS가 무효화되므로, 직접 의존 파일 해시와 의존 경로 패턴 비교로 범위를 좁혔다.
+- PASS 효력 판정은 로컬 해시 계산으로 처리하고 의미론이 필요한 영향 범위는 `UNCLASSIFIED`로 메인에 반환한다.
+- 상태 파일은 작업 중 임시 실행 정보이며 followup ignore 범위에 두고 커밋하지 않는다.
+- runbook은 파일 하나를 고른 뒤에도 빠른 진입점이나 가까운 실패 사례부터 확인하고, 필요한 경우에만 추가 섹션으로 확장한다.
+- script 상세 계약을 하위 README가 소유하게 해 `.codex/README.md`를 읽는 작업에서 불필요한 script 옵션까지 함께 읽는 비용을 줄였다.
+
+### 검증
+
+- 모든 shell script의 `bash -n` 문법 검사를 통과했다.
+- 거버넌스 후보와 구현 계약 후보에서 변경 성격 미입력 시 `UNCLASSIFIED`가 반환되는 것을 확인했다.
+- `workflow-implementation-change`, `non-contract-doc`에서 불필요한 거버넌스와 구현 검증이 비활성화되는 것을 확인했다.
+- 단일 모듈 구현 변경 dry-run에서 해당 모듈 테스트만 계획되는 것을 확인했다.
+- 의존 파일이 유지되면 `REUSED`, 변경되면 `RECHECK`, 무관한 scope 파일만 추가되면 기존 PASS가 유지되는 것을 확인했다.
+- 실제 문서 거버넌스 `FAIL` 결과를 수정된 scope로 재개해 실패 원본 보존과 `.retry` PASS 결과 생성을 확인했다.
+- 현재 4단계 scope의 문서 거버넌스 검증을 통과했고 구현 검증 게이트가 불필요함을 확인했다.

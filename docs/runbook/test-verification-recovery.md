@@ -10,6 +10,13 @@
 
 정상적인 구현 검증, 테스트, Gradle 작업을 시작한다는 이유만으로 선행 로드하지 않는다.
 
+## 빠른 진입점
+
+- 테스트 범위나 모듈 선택이 흔들리면 `검증/자기점검 때 볼 분기`에서 가까운 항목 하나를 먼저 고른다.
+- 이미 검증 실패가 발생했고 재시도가 필요하면 `실패 후 복구 순서`부터 확인한다.
+- 같은 실패가 반복됐거나 새 사례를 남길지 판단해야 하면 `반복 실수/실패 사례`에서 가까운 사례만 먼저 확인한다.
+- 세션 재개로 실패 상태가 흐려졌다면 followup의 `현재 상태`, `.scope`, `검증 단계`를 먼저 맞춘 뒤 필요한 섹션만 추가 확인한다.
+
 ## 먼저 다시 볼 원문
 
 - 현재 실패와 직접 관련된 검증 출력
@@ -47,7 +54,7 @@
 - 증상: `REQUIREMENTS`, `guide`, `decision`을 바꾼 뒤 테스트가 실패한다.
 - 원인: 문서 기대와 코드 반영 범위를 같은 세트로 보지 않았다.
 - 복구: 관련 문서, 구현 경로, 테스트를 한 번에 다시 매핑한다.
-- 방지: 계약 문서 변경 시 `.codex/scripts/check-doc-implementation.sh --strict`를 먼저 돌린다.
+- 방지: 계약 문서 변경 시 확정한 변경 성격과 scope를 넘겨 `.codex/scripts/check-doc-implementation.sh --dry-run`으로 검증 계획을 먼저 확인한다.
 
 ### 3. Gradle 설정 변경 후 전체 테스트 실패
 
@@ -62,10 +69,6 @@
 2. `먼저 다시 볼 원문`에서 필요한 파일만 다시 읽는다.
 3. 세션 재개 작업이거나 상태가 흐려졌다면 followup의 `현재 상태`, `.scope`, `검증 단계`를 먼저 다시 맞춘다.
 4. 변경 경로와 관련 모듈을 먼저 적는다.
-5. `.codex/scripts/check-doc-implementation.sh --strict` 또는 `--run`으로 현재 상태를 확인한다.
-6. 실패가 나면 원인을 고치고 `.codex/scripts/verify-and-retry.sh`로 PASS를 다시 닫는다.
-7. 실패 축이 명확하면 이 문서에 바로 새 케이스를 추가하거나 기존 항목을 보강한다.
-
-## 자동 기록된 실패 케이스
-
-이 섹션은 `.codex/scripts/verify-and-retry.sh`가 실패 축이 명확한 검증 실패를 확인했을 때 바로 추가한다.
+5. `.codex/scripts/check-doc-implementation.sh --change-kind <kind> --dry-run`으로 계획을 확인하고, 검증 대기 단계에서 `--run --result-file <path>`로 최초 검증을 실행한다.
+6. 실패가 나면 원인을 고치고 실패 결과 파일과 기존 PASS 결과 파일을 `.codex/scripts/verify-and-retry.sh`에 전달해 영향받은 검증만 다시 실행한다.
+7. 메인이 실패 축과 runbook 게이트를 확정한 경우에만 `--runbook-approved`를 명시해 이 문서에 새 케이스를 추가하거나 기존 항목을 보강한다.

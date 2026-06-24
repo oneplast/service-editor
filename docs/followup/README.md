@@ -33,7 +33,7 @@
 - scope 파일 경로가 표준 형태가 아니거나 followup 파일을 명시해야 하면 `.codex/scripts/*.sh --followup-file <path>`를 함께 넘긴다.
 - 코드/계약 변경 작업은 `현재 상태`에 `검증 단계: 진행 중` 또는 `검증 단계: 검증 대기`를 적는다.
 - `진행 중`은 구현을 이어가는 단계다. 이때는 필요할 때만 컴파일, 아주 좁은 테스트, sanity check를 선택하고 전체 PASS 게이트는 유예한다.
-- `검증 대기`는 기능 단위를 닫을 준비가 된 단계다. 이때부터 `verify-and-retry`로 PASS를 닫는다.
+- `검증 대기`는 기능 단위를 닫을 준비가 된 단계다. 최초 검증을 실행해 PASS를 닫고, 실제 `FAIL`이 발생한 경우에만 해당 결과 파일을 `verify-and-retry`에 전달한다.
 
 ## 언제 생성하거나 갱신하는가
 
@@ -61,6 +61,7 @@
   - 예: `docs-governance-harness.md`
 - 완료된 작업은 파일을 삭제하거나, 정말 장기 보관 가치가 있으면 `prompts/worklog/` 또는 적절한 공식 문서로 옮긴다.
 - scope 파일은 가능한 한 `docs/followup/active/<slug>.scope`처럼 같은 작업명으로 둔다.
+- 게이트 결과와 PASS fingerprint는 `docs/followup/active/.state/<slug>-<gate>.state`에 두고 followup에는 필요한 경로만 남긴다.
 - `docs/followup/active/`에는 동시에 여러 작업 파일을 쌓지 않는다. 진행 중 작업 기준으로 하나만 유지하는 것을 기본 원칙으로 한다.
 
 ## 필수 구조
