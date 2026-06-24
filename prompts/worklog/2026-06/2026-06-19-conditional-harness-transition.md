@@ -191,3 +191,36 @@
 - 단일 read command를 명시 허용한 뒤 `.codex/config/subagent-task-contract.md`만 읽고 선택적 subagent orchestration 핵심 조건을 확인하는 smoke test가 `PASS`로 끝났다.
 - 문서 거버넌스 검증을 통과했다.
 - `git diff --check`를 통과했다.
+
+## Step 7. 조건부 하네스 게이트 시나리오 검증 추가
+
+### 목적
+
+- 조건부 하네스 중 script로 관찰 가능한 대표 게이트 분기가 false positive와 false negative 없이 동작하는지 자동 검증한다.
+
+### 변경 내용
+
+- `.codex/scripts/check-harness-scenarios.sh`를 추가했다.
+- 시나리오 검증은 `/tmp`에 임시 scope와 state를 만들고 기존 게이트 script의 exit code와 출력만 확인하도록 했다.
+- 문서 거버넌스 후보 없음, 변경 성격 미확정, 비활성, workflow 계약 변경 실패와 성공을 검증했다.
+- 구현 검증 후보 없음, 변경 성격 미확정, 비활성, 모듈별 dry-run, 전체 dry-run, scope 불일치를 검증했다.
+- 실패 재시도에서 영향 없는 `PASS` 재사용, 영향받은 `PASS` 재검증 후보, `FAIL`이 아닌 failure-file 차단을 검증했다.
+- 이 script는 운영 파이프라인의 자동 고려 대상이 아니므로 `.codex/README.md`, `.codex/scripts/README.md`, topic에는 재사용 경로로 연결하지 않았다.
+
+### 판단
+
+- 7단계는 자동화 가능한 게이트 회귀 검증으로 제한하고, Direct/Scoped/subagent/doc-impact처럼 에이전트 행동을 직접 봐야 하는 계약은 8단계 최종 정합성 검토에서 확인한다.
+- Direct 작업에서 문서를 읽지 않는지 같은 메인 행동 계약은 shell script로 직접 증명하지 않고, 게이트 script가 기계적으로 판정 가능한 대표 분기만 자동화했다.
+- 제품 코드와 CI를 변경하지 않고 하네스 자체의 분기 안정성을 확인하는 방식으로 7단계 범위를 제한했다.
+
+### 검증
+
+- `bash .codex/scripts/check-harness-scenarios.sh`를 실행해 14개 대표 시나리오의 31개 assertion이 모두 통과했다.
+- 여기서 assertion은 각 시나리오의 exit code와 핵심 출력 문구를 확인한 단위다.
+
+| 축 | 시나리오 수 | assertion 수 | 검증 내용 |
+| --- | ---: | ---: | --- |
+| doc-governance | 5 | 10 | 후보 없음, 미확정, 비활성, 필수 연결 문서 누락 실패, 정상 `PASS` |
+| implementation | 6 | 13 | 후보 없음, 미확정, 비활성, 모듈 dry-run, 전체 dry-run, scope 불일치 |
+| retry | 3 | 8 | 선행 `PASS` 재사용, 영향받은 `PASS` 재검증 후보, 잘못된 failure-file 차단 |
+| 합계 | 14 | 31 | 자동화 가능한 대표 게이트 분기 검증 |
