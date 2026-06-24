@@ -132,3 +132,32 @@
 - 의존 파일이 유지되면 `REUSED`, 변경되면 `RECHECK`, 무관한 scope 파일만 추가되면 기존 PASS가 유지되는 것을 확인했다.
 - 실제 문서 거버넌스 `FAIL` 결과를 수정된 scope로 재개해 실패 원본 보존과 `.retry` PASS 결과 생성을 확인했다.
 - 현재 4단계 scope의 문서 거버넌스 검증을 통과했고 구현 검증 게이트가 불필요함을 확인했다.
+
+## Step 5. 메인·서브 에이전트 역할과 호출 계약 정의
+
+### 목적
+
+- subagent 게이트가 활성화될 때 메인과 서브의 역할, 입력 패킷, 출력 계약을 정의한다.
+
+### 변경 내용
+
+- subagent 역할과 task packet 원본을 `.codex/config/subagent-task-contract.md`로 추가했다.
+- 메인 에이전트가 최초 작업 수준, 게이트 판정, 사용자 소통, 결과 통합, 최종 검증과 완료 선언을 소유하도록 고정했다.
+- 서브 역할 후보를 `Explorer`, `Worker`, `Doc Governance Reviewer`, `Verification Analyst`로 나누고 각 역할의 권한과 금지사항을 정의했다.
+- 서브 호출 기본값을 `OFF`로 두고, 역할별 상시 분업이 아니라 main-owned selective subagent orchestration으로 정의했다.
+- task packet의 context를 확정 사실, 짧은 원문 발췌, 허용 읽기 범위, 금지 읽기 범위, state 참조, 재분류 금지 항목으로 나눠 중복 읽기와 누락 위험을 함께 줄이도록 했다.
+- Explorer는 문서 읽기 대행자가 아니라 넓은 후보 범위를 짧은 후보 목록과 최소 확인 대상으로 줄이는 역할로 고정했다.
+
+### 판단
+
+- `skill = subagent` 1:1 매핑은 금지하고, 역할 기반 bounded capability로 정의했다.
+- 서브의 `PASS`는 bounded task 완료일 뿐 전체 작업 완료가 아니며, 최종 완료는 메인이 선언한다.
+- 단순 문서 읽기, 단일 파일 수정, 작은 검증 판단은 메인이 직접 수행하고 subagent로 분리하지 않는다.
+- Explorer의 `files_read`는 추적용 메타데이터이며, 메인은 Explorer가 읽은 파일 전체를 다시 읽지 않고 `candidate_files`와 `minimum_next_check`의 최소 대상만 확인한다.
+- `REQUIREMENTS`, ADR, 새 runbook 축, 외부 계약, 변경 성격 확정은 메인 또는 사람이 최종 판단한다.
+- 실제 플랫폼 등록과 호출 절차 연결은 6단계 범위로 남겼다.
+
+### 검증
+
+- 문서 거버넌스 검증을 통과했다.
+- `git diff --check`를 통과했다.

@@ -24,6 +24,7 @@
 - [.codex/config/doc-update-matrix.md](https://github.com/jho951/Block-server/blob/dev/.codex/config/doc-update-matrix.md)
 - [.codex/config/doc-to-code-check-matrix.md](https://github.com/jho951/Block-server/blob/dev/.codex/config/doc-to-code-check-matrix.md)
 - [.codex/config/failure-route-map.md](https://github.com/jho951/Block-server/blob/dev/.codex/config/failure-route-map.md)
+- [.codex/config/subagent-task-contract.md](https://github.com/jho951/Block-server/blob/dev/.codex/config/subagent-task-contract.md)
 - [prompts/README.md](https://github.com/jho951/Block-server/blob/dev/prompts/README.md)
 - [prompts/topics/README.md](https://github.com/jho951/Block-server/blob/dev/prompts/topics/README.md)
 
@@ -33,6 +34,7 @@
 - 문서 전역 규칙과 디렉토리별 상세 기준은 `docs/README.md`와 각 경로 `README.md`가 담당한다.
 - README, skill, script, runbook, followup, prompts, subagent는 작업 조건에 맞는 게이트가 활성화될 때만 확장한다.
 - 메인 에이전트가 초기 작업 수준과 게이트를 판정하고, skill과 script는 확정된 입력을 재사용하거나 새 위험 신호만 반환한다.
+- subagent는 역할별 상시 분업자가 아니라 bounded task와 중복 컨텍스트 비용 대비 이득이 명확할 때만 task packet으로 호출하는 선택적 capability이며, 최종 통합과 완료 선언은 메인 에이전트가 소유한다.
 - 변경 경로는 후보 탐지에만 사용하고, 문서 체계·workflow 계약·구현 계약의 실제 변경 여부는 diff 기준 변경 성격으로 확정한다.
 - 코드·설정 변경은 `DOC_REQUIRED`, `DOC_NONE`, `DOC_UNDETERMINED`로 문서 영향을 먼저 판정하고 필요한 경우에만 공식 문서를 갱신한다.
 - `DOC_REQUIRED`의 제품 문서 최신화와 문서 체계·규칙 변경의 `doc-governance`는 별도 게이트로 유지한다.
