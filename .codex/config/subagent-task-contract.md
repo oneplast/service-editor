@@ -4,7 +4,7 @@
 
 subagent는 기본값이 `OFF`다. 메인 에이전트가 기본 실행 주체이며, subagent는 역할별 상시 분업자가 아니라 선택적으로 호출하는 bounded capability다. 작업을 독립적인 bounded task로 나눌 수 있고, 추가 에이전트 호출로 생기는 중복 컨텍스트 비용보다 탐색·검증 이득이 클 때만 사용한다.
 
-이 문서는 실제 플랫폼 등록이나 호출 절차를 정의하지 않는다. 호출 절차와 연결 방식은 후속 오케스트레이션 단계에서 별도로 다룬다.
+실제 subagent 호출과 결과 통합 절차는 `.codex/skills/subagent-orchestration/SKILL.md`를 따른다. 런타임이 subagent 도구를 제공하더라도 이 문서의 호출 조건, packet, 통합 계약을 만족할 때만 사용한다.
 
 ## 기본 실행 모델
 
@@ -167,6 +167,8 @@ allowed_commands:
 expected_output:
 stop_conditions:
 handoff_format:
+base_revision:
+scope_fingerprint:
 ```
 
 필드 기준:
@@ -177,10 +179,61 @@ handoff_format:
 - `blocked_reads`에는 읽으면 안 되는 범위를 명시한다.
 - `state_refs`에는 재사용할 실패 결과, PASS state, scope 파일만 넣는다.
 - 전체 README, 전체 skill, 전체 runbook은 기본 전달하거나 읽게 하지 않는다.
-- `allowed_commands`가 비어 있으면 서브는 명령을 실행하지 않는다.
+- `allowed_reads`는 읽기 대상 허용 범위이고, `allowed_commands`는 그 읽기를 수행하는 실행 방식이다. 파일 본문을 직접 읽어야 하면 read-only command를 명시하거나 필요한 발췌를 `quoted_extracts`로 전달한다.
+- `allowed_commands`가 비어 있으면 서브는 파일 읽기 명령을 포함해 어떤 명령도 실행하지 않는다.
 - `change_kind`와 `doc_impact`가 미확정이면 서브가 확정하지 않고 `UNCLASSIFIED` 신호를 반환한다.
 - `must_not_reclassify`에는 서브가 반복 판정하면 안 되는 작업 수준, 게이트, 문서 영향, 변경 성격을 넣는다.
 - `stop_conditions`에는 범위 밖 파일 발견, 계약 변경 필요, 실패 축 불명확, 사용자 결정 필요 같은 중단 조건을 넣는다.
+- `base_revision`이나 `scope_fingerprint`가 있으면 서브 결과 통합 전에 현재 diff와 어긋나는지 확인한다.
+
+## 호출 절차
+
+1. 메인이 현재 작업 수준과 독립 게이트 상태를 먼저 확정한다.
+2. subagent가 필요한지 아래 순서로 판정한다.
+   - 메인이 직접 처리하면 더 작은 컨텍스트로 끝나는가
+   - bounded task로 분리 가능한가
+   - 중복 읽기·호출 비용보다 탐색·검토·병렬화 이득이 큰가
+   - 읽기/수정/명령 실행 범위를 명확히 제한할 수 있는가
+3. 호출하지 않는 경우 메인이 기존 `Direct`, `Scoped`, `Harness` 흐름에서 계속 진행한다.
+4. 호출하는 경우 메인이 task packet을 작성하고 필수 필드를 확인한다.
+5. 서브는 packet 안에서만 작업하고, 범위 밖 정보가 필요하면 `UNCLASSIFIED`를 반환한다.
+6. 메인은 서브 결과를 검토해 현재 diff, scope, state와 충돌하지 않을 때만 통합한다.
+
+## 병렬 호출 기준
+
+병렬 호출은 기본값이 아니다. 아래 조건을 모두 만족할 때만 허용한다.
+
+- 각 task가 서로 독립적이다.
+- 읽기 범위 또는 수정 범위가 겹치지 않는다.
+- 한 서브의 출력이 다른 서브의 입력으로 필요하지 않다.
+- 병렬화 이득이 중복 context 비용보다 크다.
+- 메인이 결과를 통합할 순서와 충돌 처리 기준을 갖고 있다.
+
+허용 예:
+
+- 서로 다른 범위의 후보 탐색
+- 수정 권한이 없는 독립 문서 거버넌스 리뷰
+- 이미 생성된 실패 state와 PASS state를 읽는 검증 분석
+
+금지 예:
+
+- 같은 파일이나 같은 모듈을 수정하는 복수 Worker
+- Explorer 결과를 봐야 Worker 범위를 정할 수 있는 작업
+- Worker 수정 diff가 있어야 Doc Governance Reviewer가 의미 있게 검토할 수 있는 작업
+- Verification Analyst가 실패 state 생성 전에는 판단할 수 없는 작업
+
+## 통합 절차
+
+메인은 서브 결과를 아래 순서로 통합한다.
+
+1. `status`가 `PASS`, `FAIL`, `UNCLASSIFIED` 중 하나인지 확인한다.
+2. `base_revision`, `scope_fingerprint`, `files_changed`, `files_read`가 현재 작업 상태와 충돌하지 않는지 확인한다.
+3. `UNCLASSIFIED`이면 `minimum_next_check`만 확인하고 같은 task 또는 메인 흐름의 재개 여부를 정한다.
+4. `FAIL`이면 실패 정보를 기준으로 `verification-retry`와 `runbook` 게이트를 각각 판정한다.
+5. `PASS`이면 bounded task 결과로만 받아들이고 전체 작업 완료로 해석하지 않는다.
+6. Worker가 수정한 파일은 메인이 diff를 검토한 뒤 최종 변경 세트에 포함한다.
+7. Explorer가 읽은 전체 파일을 다시 읽지 않고, `candidate_files`와 `minimum_next_check`의 최소 대상만 확인한다.
+8. 충돌하거나 기준 상태가 달라졌으면 서브 결과를 그대로 통합하지 않고 `UNCLASSIFIED`로 재분류한다.
 
 ## 출력 계약
 
@@ -198,6 +251,8 @@ findings:
 risks:
 needs_main_decision:
 minimum_next_check:
+base_revision:
+scope_fingerprint:
 ```
 
 `files_read`는 추적용 메타데이터다. 메인이 다시 읽어야 하는 목록이 아니다. 메인이 직접 확인할 대상은 `minimum_next_check`와 `candidate_files`에서 필요한 최소 범위로 제한한다.

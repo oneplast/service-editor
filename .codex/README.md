@@ -24,7 +24,7 @@
 - 문서 체계 검증은 `.codex/scripts/check-doc-governance.sh`, 구현 검증 필요 여부 판별과 테스트 실행은 `.codex/scripts/check-doc-implementation.sh`를 기준으로 한다.
 - 검증 실패 재검증과 메인이 확정한 실패 케이스 기록은 `.codex/config/failure-route-map.md`, `.codex/scripts/verify-and-retry.sh`, `.codex/skills/verification-retry/SKILL.md`를 기준으로 한다.
 - 구현 검증의 경로별 태스크와 로컬 제외 테스트는 `.codex/config/doc-to-code-check-matrix.md`를 원본으로 본다.
-- subagent 역할과 task packet 계약은 `.codex/config/subagent-task-contract.md`를 원본으로 본다. subagent는 상시 분업자가 아니라 선택적 capability이며, 실제 플랫폼 호출 절차는 별도 오케스트레이션 단계에서 연결한다.
+- subagent 역할과 task packet 계약은 `.codex/config/subagent-task-contract.md`를 원본으로 보고, 선택적 호출과 결과 통합 절차는 `.codex/skills/subagent-orchestration/SKILL.md`를 따른다. subagent는 상시 분업자가 아니라 선택적 capability다.
 - `AGENTS.md`는 게이트 존재와 상위 활성화 원칙, README는 경로 규칙, config는 세부 판정 기준, skill은 실행 절차, script는 입력·출력과 기계적 실행을 소유한다.
 - 하위 파일은 상위 원칙을 다시 정의하지 않고, 자신의 역할에 필요한 세부 계약만 둔다.
 - 문서·복구 skill은 단순 작업에서 자동 활성화하지 않고, 각 `SKILL.md`의 `사용할 때` 조건을 만족할 때만 사용한다.

@@ -161,3 +161,33 @@
 
 - 문서 거버넌스 검증을 통과했다.
 - `git diff --check`를 통과했다.
+
+## Step 6. 조건부 서브 에이전트 오케스트레이션 절차 연결
+
+### 목적
+
+- 5단계에서 정의한 subagent 역할과 task packet 계약을 실제 호출 판단, 병렬 조건, 결과 통합 절차로 연결한다.
+
+### 변경 내용
+
+- subagent 호출과 결과 통합 절차를 `.codex/skills/subagent-orchestration/SKILL.md`로 추가했다.
+- `.codex/config/subagent-task-contract.md`의 후속 단계 임시 문구를 실제 skill 경로로 바꿨다.
+- task packet 검증, `allowed_reads`/`blocked_reads`, `state_refs`, `must_not_reclassify` 사용 절차를 skill에 연결했다.
+- 파일 본문 읽기가 필요한 subagent task는 `allowed_reads`와 read-only `allowed_commands`를 함께 주거나 `quoted_extracts`로 필요한 원문만 전달하도록 보강했다.
+- 병렬 호출은 독립 읽기·분석 task에만 허용하고, Worker 수정 범위가 겹치면 순차 실행하도록 정리했다.
+- Explorer, Worker, Doc Governance Reviewer, Verification Analyst별 packet 주의점을 분리했다.
+- 검증 결과는 검증 대상을 만든 Step이 아니라 실제 검증을 실행한 Step에 기록하도록 worklog 운영 기준을 보강했다.
+
+### 판단
+
+- 실제 subagent 런타임이 있더라도 이 저장소 계약을 만족할 때만 선택적으로 호출한다.
+- subagent 호출은 속도 최적화가 아니라 중복 context 비용보다 이득이 클 때만 사용하는 절차다.
+- 서브 결과의 `PASS`는 bounded task 완료일 뿐 전체 작업 완료가 아니며, 메인이 현재 diff와 state 기준을 대조한 뒤 통합한다.
+
+### 검증
+
+- 실제 subagent 호출 smoke test를 수행해 bounded packet 준수와 별도 subagent 응답 수신을 확인했다.
+- `allowed_commands`가 비어 있으면 subagent가 파일 읽기 명령도 실행하지 않고 `UNCLASSIFIED`를 반환하는 것을 확인했다.
+- 단일 read command를 명시 허용한 뒤 `.codex/config/subagent-task-contract.md`만 읽고 선택적 subagent orchestration 핵심 조건을 확인하는 smoke test가 `PASS`로 끝났다.
+- 문서 거버넌스 검증을 통과했다.
+- `git diff --check`를 통과했다.
