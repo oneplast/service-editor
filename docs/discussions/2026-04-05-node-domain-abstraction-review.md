@@ -10,7 +10,7 @@
 
 - 현재 블록 서버는 `Document` 계층과 `Block` 트리를 각각 별도 엔티티로 관리한다.
 - 두 도메인은 `parentId`, `sortKey`, 이동/재정렬, soft delete, 계층 조회처럼 공통점이 많다.
-- 실제 코드도 공통 정렬 정책은 이미 [`OrderedSortKeyGenerator`](https://github.com/jho951/Block-server/blob/dev/docs/explainers/ordered-sortkey-generator.md)로 공유한다.
+- 실제 코드도 공통 정렬 정책은 이미 [`OrderedSortKeyGenerator`](https://github.com/oneplast/service-editor/blob/dev/docs/explainers/ordered-sortkey-generator.md)로 공유한다.
 - 반면 문서와 블록은 권한/소유, version, 상위 검증, 콘텐츠/메타데이터 규칙이 다르다.
 - 따라서 질문은 "공통화가 필요한가"보다 "공통화를 어느 레벨에 둘 것인가"에 가깝다.
 
@@ -32,10 +32,10 @@
   - Rocicorp fractional-indexing README  
     https://github.com/rocicorp/fractional-indexing
 - 내부 문서
-  - [docs/REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
-  - [docs/decisions/008-adopt-gap-based-lexicographic-sort-key-policy.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/008-adopt-gap-based-lexicographic-sort-key-policy.md)
-  - [docs/decisions/009-map-document-hierarchy-with-jpa-associations-and-db-cascade.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/009-map-document-hierarchy-with-jpa-associations-and-db-cascade.md)
-  - [docs/decisions/010-map-block-hierarchy-with-jpa-associations-and-db-cascade.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/010-map-block-hierarchy-with-jpa-associations-and-db-cascade.md)
+  - [docs/REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)
+  - [docs/decisions/008-adopt-gap-based-lexicographic-sort-key-policy.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/008-adopt-gap-based-lexicographic-sort-key-policy.md)
+  - [docs/decisions/009-map-document-hierarchy-with-jpa-associations-and-db-cascade.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/009-map-document-hierarchy-with-jpa-associations-and-db-cascade.md)
+  - [docs/decisions/010-map-block-hierarchy-with-jpa-associations-and-db-cascade.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/010-map-block-hierarchy-with-jpa-associations-and-db-cascade.md)
 
 ### 참고 자료와 현재 구조에서 확인한 점
 
@@ -602,11 +602,11 @@ support
    - reorder/rebalance 후보
 2. `EditorOperationController`가 받을 request shape 후보를 별도 검토한다.
 3. move는 새 공통 operation service로 뺄지, transaction/save는 기존 orchestrator를 재사용할지 분리 검토한다.
-4. 이 검토 결과는 이후 [`ADR 021`](https://github.com/jho951/Block-server/blob/dev/docs/decisions/021-adopt-editor-operation-controller-boundary.md)로 채택되었다.
+4. 이 검토 결과는 이후 [`ADR 021`](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/021-adopt-editor-operation-controller-boundary.md)로 채택되었다.
 
 ## 관련 문서
 
-- [docs/decisions/021-adopt-editor-operation-controller-boundary.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/021-adopt-editor-operation-controller-boundary.md)
-- [docs/discussions/2026-03-27-v1-remove-workspace-from-document-flow-review.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-27-v1-remove-workspace-from-document-flow-review.md)
-- [docs/roadmap/v2/workspace/workspace-reintroduction.md](https://github.com/jho951/Block-server/blob/dev/docs/roadmap/v2/workspace/workspace-reintroduction.md)
-- [prompts/worklog/2026-04/2026-04-05-node-domain-abstraction-review.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-04/2026-04-05-node-domain-abstraction-review.md)
+- [docs/decisions/021-adopt-editor-operation-controller-boundary.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/021-adopt-editor-operation-controller-boundary.md)
+- [docs/discussions/2026-03-27-v1-remove-workspace-from-document-flow-review.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-27-v1-remove-workspace-from-document-flow-review.md)
+- [docs/roadmap/v2/workspace/workspace-reintroduction.md](https://github.com/oneplast/service-editor/blob/dev/docs/roadmap/v2/workspace/workspace-reintroduction.md)
+- [prompts/worklog/2026-04/2026-04-05-node-domain-abstraction-review.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-04/2026-04-05-node-domain-abstraction-review.md)

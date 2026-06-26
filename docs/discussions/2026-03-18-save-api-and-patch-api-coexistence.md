@@ -379,6 +379,6 @@ transaction API만 있으면 모든 테스트가 "배치 저장" 문맥에 묶�
 
 ## 관련 문서
 
-- [블록 저장 API 검토 메모](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-18-block-save-api-review.md)
-- [블록 저장 API 전략 검토 메모](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-18-block-save-api-strategy.md)
-- 작업 로그: [prompts/worklog/2026-03/2026-03-20-editor-transaction-save-model.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-20-editor-transaction-save-model.md)
+- [블록 저장 API 검토 메모](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-18-block-save-api-review.md)
+- [블록 저장 API 전략 검토 메모](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-18-block-save-api-strategy.md)
+- 작업 로그: [prompts/worklog/2026-03/2026-03-20-editor-transaction-save-model.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-20-editor-transaction-save-model.md)

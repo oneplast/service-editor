@@ -26,8 +26,8 @@
 - 새 사실이 생기면 계속 덧붙이지 말고, 완료된 내용은 줄이고 최신 상태만 남긴다.
 - 관련 없는 여러 작업을 한 파일에 섞지 않는다.
 - 다음 세션에서 이 파일 하나만 읽어도 바로 재개할 수 있어야 한다.
-- 반복 절차가 필요하면 [`.codex/skills/followup-handoff/SKILL.md`](https://github.com/jho951/Block-server/blob/dev/.codex/skills/followup-handoff/SKILL.md)를 따른다.
-- 문서 영향 판정과 공식 문서 갱신 대상은 [`.codex/config/doc-update-matrix.md`](https://github.com/jho951/Block-server/blob/dev/.codex/config/doc-update-matrix.md)를 따른다.
+- 반복 절차가 필요하면 [`.codex/skills/followup-handoff/SKILL.md`](https://github.com/oneplast/service-editor/blob/dev/.codex/skills/followup-handoff/SKILL.md)를 따른다.
+- 문서 영향 판정과 공식 문서 갱신 대상은 [`.codex/config/doc-update-matrix.md`](https://github.com/oneplast/service-editor/blob/dev/.codex/config/doc-update-matrix.md)를 따른다.
 - `.codex/scripts/check-doc-governance.sh`는 문서 체계·규칙·workflow 계약을 바꾼 작업에서만 사용한다.
 - 작업 범위 검증이 필요하면 `.codex/scripts/*.sh --scope-file <path>` 형태로 현재 작업 파일 목록을 넘긴다.
 - scope 파일 경로가 표준 형태가 아니거나 followup 파일을 명시해야 하면 `.codex/scripts/*.sh --followup-file <path>`를 함께 넘긴다.
@@ -100,7 +100,7 @@
 
 ## 템플릿과 정리
 
-- 새 파일은 [docs/followup/000-active-task-template.md](https://github.com/jho951/Block-server/blob/dev/docs/followup/000-active-task-template.md) 기준으로 만든다.
+- 새 파일은 [docs/followup/000-active-task-template.md](https://github.com/oneplast/service-editor/blob/dev/docs/followup/000-active-task-template.md) 기준으로 만든다.
 - 템플릿의 빈 항목은 `-`와 `1.`처럼 placeholder만 두고, 불필요한 trailing whitespace를 남기지 않는다.
 - 작업이 끝났고 다시 이어갈 필요가 없으면 파일을 삭제한다.
 - 후속 작업이 남아 있으면 완료 항목은 지우고 다음 세션에 필요한 최소 상태만 남긴다.

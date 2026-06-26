@@ -59,6 +59,6 @@
 
 ## 관련 문서
 
-- [2026-04-05-node-domain-abstraction-review.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-04-05-node-domain-abstraction-review.md)
-- [REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
-- [editor/editor-guideline.md](https://github.com/jho951/Block-server/blob/dev/docs/guides/editor/editor-guideline.md)
+- [2026-04-05-node-domain-abstraction-review.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-04-05-node-domain-abstraction-review.md)
+- [REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)
+- [editor/editor-guideline.md](https://github.com/oneplast/service-editor/blob/dev/docs/guides/editor/editor-guideline.md)

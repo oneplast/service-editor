@@ -6,22 +6,22 @@ editor 기능군의 save, move, editor save 기반 저장 모델, temp ref 해�
 
 ## 관련 worklog
 
-- [2026-03-18-version-request-rationale.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-18-version-request-rationale.md)
-- [2026-03-20-editor-transaction-save-model.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-20-editor-transaction-save-model.md)
-- [2026-03-25-document-version-concurrency.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-25-document-version-concurrency.md)
+- [2026-03-18-version-request-rationale.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-18-version-request-rationale.md)
+- [2026-03-20-editor-transaction-save-model.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-20-editor-transaction-save-model.md)
+- [2026-03-25-document-version-concurrency.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-25-document-version-concurrency.md)
 
 ## 관련 문서
 
-- [docs/REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
-- [docs/discussions/2026-03-20-editor-save-api-boundary-and-transaction-design.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-20-editor-save-api-boundary-and-transaction-design.md)
-- [docs/discussions/2026-04-05-node-domain-abstraction-review.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-04-05-node-domain-abstraction-review.md)
-- [docs/discussions/2026-03-20-editor-transaction-dto-and-frontend-queue-spec.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-20-editor-transaction-dto-and-frontend-queue-spec.md)
-- [docs/decisions/014-adopt-transaction-centered-editor-save-model.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/014-adopt-transaction-centered-editor-save-model.md)
-- [docs/decisions/021-adopt-editor-operation-controller-boundary.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/021-adopt-editor-operation-controller-boundary.md)
-- [docs/explainers/editor-save-model.md](https://github.com/jho951/Block-server/blob/dev/docs/explainers/editor-save-model.md)
-- [docs/guides/editor/editor-guideline.md](https://github.com/jho951/Block-server/blob/dev/docs/guides/editor/editor-guideline.md)
-- [docs/guides/editor/frontend-editor-guideline.md](https://github.com/jho951/Block-server/blob/dev/docs/guides/editor/frontend-editor-guideline.md)
-- [docs/guides/editor/backend-editor-guideline.md](https://github.com/jho951/Block-server/blob/dev/docs/guides/editor/backend-editor-guideline.md)
+- [docs/REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)
+- [docs/discussions/2026-03-20-editor-save-api-boundary-and-transaction-design.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-20-editor-save-api-boundary-and-transaction-design.md)
+- [docs/discussions/2026-04-05-node-domain-abstraction-review.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-04-05-node-domain-abstraction-review.md)
+- [docs/discussions/2026-03-20-editor-transaction-dto-and-frontend-queue-spec.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-20-editor-transaction-dto-and-frontend-queue-spec.md)
+- [docs/decisions/014-adopt-transaction-centered-editor-save-model.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/014-adopt-transaction-centered-editor-save-model.md)
+- [docs/decisions/021-adopt-editor-operation-controller-boundary.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/021-adopt-editor-operation-controller-boundary.md)
+- [docs/explainers/editor-save-model.md](https://github.com/oneplast/service-editor/blob/dev/docs/explainers/editor-save-model.md)
+- [docs/guides/editor/editor-guideline.md](https://github.com/oneplast/service-editor/blob/dev/docs/guides/editor/editor-guideline.md)
+- [docs/guides/editor/frontend-editor-guideline.md](https://github.com/oneplast/service-editor/blob/dev/docs/guides/editor/frontend-editor-guideline.md)
+- [docs/guides/editor/backend-editor-guideline.md](https://github.com/oneplast/service-editor/blob/dev/docs/guides/editor/backend-editor-guideline.md)
 
 ## 현재 기준
 

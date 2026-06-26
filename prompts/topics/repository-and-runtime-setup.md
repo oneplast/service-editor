@@ -6,21 +6,21 @@
 
 ## 관련 worklog
 
-- [2026-03-13-multi-module-migration.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-13-multi-module-migration.md)
-- [2026-03-14-gitignore-secrets.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-14-gitignore-secrets.md)
-- [2026-03-14-gradle-properties-runtime-config.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-14-gradle-properties-runtime-config.md)
-- [2026-03-14-jpa-migration.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-14-jpa-migration.md)
-- [2026-03-14-module-name-sync.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-14-module-name-sync.md)
-- [2026-03-15-gradle-version-properties.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-15-gradle-version-properties.md)
-- [2026-03-15-workspace-bootstrap.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-15-workspace-bootstrap.md)
-- [2026-03-16-application-runtime-config.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-16-application-runtime-config.md)
-- [2026-03-27-docker-env-split-and-run-scripts.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-27-docker-env-split-and-run-scripts.md)
+- [2026-03-13-multi-module-migration.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-13-multi-module-migration.md)
+- [2026-03-14-gitignore-secrets.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-14-gitignore-secrets.md)
+- [2026-03-14-gradle-properties-runtime-config.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-14-gradle-properties-runtime-config.md)
+- [2026-03-14-jpa-migration.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-14-jpa-migration.md)
+- [2026-03-14-module-name-sync.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-14-module-name-sync.md)
+- [2026-03-15-gradle-version-properties.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-15-gradle-version-properties.md)
+- [2026-03-15-workspace-bootstrap.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-15-workspace-bootstrap.md)
+- [2026-03-16-application-runtime-config.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-16-application-runtime-config.md)
+- [2026-03-27-docker-env-split-and-run-scripts.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-27-docker-env-split-and-run-scripts.md)
 
 ## 관련 문서
 
-- [docs/REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
-- [docs/runbook/DEBUG.md](https://github.com/jho951/Block-server/blob/dev/docs/runbook/DEBUG.md)
-- [docs/decisions/019-isolate-docker-runtime-on-private-and-shared-networks.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/019-isolate-docker-runtime-on-private-and-shared-networks.md)
+- [docs/REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)
+- [docs/runbook/DEBUG.md](https://github.com/oneplast/service-editor/blob/dev/docs/runbook/DEBUG.md)
+- [docs/decisions/019-isolate-docker-runtime-on-private-and-shared-networks.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/019-isolate-docker-runtime-on-private-and-shared-networks.md)
 
 ## 현재 기준
 

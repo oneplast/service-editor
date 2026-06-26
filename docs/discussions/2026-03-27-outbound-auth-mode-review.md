@@ -2,7 +2,7 @@
 
 ## 문서 목적
 
-- block-server가 다른 내부 서비스(user-server 등)를 호출할 때 인증 헤더 처리 기준을 정리한다.
+- editor-service가 다른 내부 서비스(user-server 등)를 호출할 때 인증 헤더 처리 기준을 정리한다.
 - 사용자 위임 호출과 시스템 내부 호출의 토큰 정책을 분리해야 하는 이유를 검토한다.
 - 이 문서는 채택 전 전략 비교 메모다.
 
@@ -37,8 +37,8 @@
 
 #### 시나리오
 
-1. 클라이언트 요청이 gateway를 거쳐 block-server로 들어온다.
-2. block-server는 user-server 호출 시 inbound 토큰을 그대로 붙인다.
+1. 클라이언트 요청이 gateway를 거쳐 editor-service로 들어온다.
+2. editor-service는 user-server 호출 시 inbound 토큰을 그대로 붙인다.
 3. 내부 시스템 작업 호출도 같은 사용자 토큰을 재사용한다.
 
 #### 장점
@@ -102,6 +102,6 @@
 
 ## 관련 문서
 
-- [017-adopt-outbound-auth-mode-separation.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/017-adopt-outbound-auth-mode-separation.md)
-- [REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
-- [2026-03-27-outbound-auth-mode-separation.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-27-outbound-auth-mode-separation.md)
+- [017-adopt-outbound-auth-mode-separation.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/017-adopt-outbound-auth-mode-separation.md)
+- [REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)
+- [2026-03-27-outbound-auth-mode-separation.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-27-outbound-auth-mode-separation.md)

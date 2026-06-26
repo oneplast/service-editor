@@ -30,5 +30,5 @@
 
 ## 관련 문서
 
-- [2026-03-27-gateway-trusted-header-review.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-27-gateway-trusted-header-review.md)
-- [REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
+- [2026-03-27-gateway-trusted-header-review.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-27-gateway-trusted-header-review.md)
+- [REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)

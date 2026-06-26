@@ -26,8 +26,8 @@
 
 ## 선택 기준
 
-- 문서 체계, followup, topic, `.codex` 작업에서 읽기 순서, 경로 분류, 규칙 중복, 복구 상태가 흔들릴 때 [docs/runbook/ai-doc-workflow-recovery.md](https://github.com/jho951/Block-server/blob/dev/docs/runbook/ai-doc-workflow-recovery.md)를 읽는다.
-- 구현 검증, 테스트, Gradle 빌드에서 실제 실패가 발생했거나 알려진 반복 실패의 예방 체크포인트가 직접 필요할 때 [docs/runbook/test-verification-recovery.md](https://github.com/jho951/Block-server/blob/dev/docs/runbook/test-verification-recovery.md)를 읽는다.
+- 문서 체계, followup, topic, `.codex` 작업에서 읽기 순서, 경로 분류, 규칙 중복, 복구 상태가 흔들릴 때 [docs/runbook/ai-doc-workflow-recovery.md](https://github.com/oneplast/service-editor/blob/dev/docs/runbook/ai-doc-workflow-recovery.md)를 읽는다.
+- 구현 검증, 테스트, Gradle 빌드에서 실제 실패가 발생했거나 알려진 반복 실패의 예방 체크포인트가 직접 필요할 때 [docs/runbook/test-verification-recovery.md](https://github.com/oneplast/service-editor/blob/dev/docs/runbook/test-verification-recovery.md)를 읽는다.
 - 장애 재현, 설정 오류, 환경 점검처럼 기능 또는 환경 자체를 다시 확인해야 하는 경우에는 해당 문제 유형 runbook만 추가로 읽는다.
 - runbook 전체를 넓게 읽지 않고, 현재 증상과 직접 연결된 파일 하나를 먼저 읽는 것을 기본 원칙으로 한다.
 - 선택한 runbook 안에서는 먼저 `빠른 진입점` 또는 현재 증상과 가장 가까운 분기 섹션만 확인하고, 원인 분류나 복구 절차가 부족할 때만 앞뒤 섹션을 추가로 읽는다.

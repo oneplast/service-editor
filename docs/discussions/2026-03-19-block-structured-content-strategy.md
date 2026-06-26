@@ -259,8 +259,8 @@
 
 ## 관련 문서
 
-- [2026-03-19-block-props-review.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-19-block-props-review.md)
-- [2026-03-18-block-save-api-strategy.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-18-block-save-api-strategy.md)
-- [2026-03-18-save-api-and-patch-api-coexistence.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-18-save-api-and-patch-api-coexistence.md)
-- [012-adopt-structured-text-content-and-staged-concurrency-roadmap.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/012-adopt-structured-text-content-and-staged-concurrency-roadmap.md)
-- [2026-03-19-block-structured-content-migration.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-19-block-structured-content-migration.md)
+- [2026-03-19-block-props-review.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-19-block-props-review.md)
+- [2026-03-18-block-save-api-strategy.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-18-block-save-api-strategy.md)
+- [2026-03-18-save-api-and-patch-api-coexistence.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-18-save-api-and-patch-api-coexistence.md)
+- [012-adopt-structured-text-content-and-staged-concurrency-roadmap.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/012-adopt-structured-text-content-and-staged-concurrency-roadmap.md)
+- [2026-03-19-block-structured-content-migration.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-19-block-structured-content-migration.md)

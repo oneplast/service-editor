@@ -8,14 +8,14 @@
 
 ## 배경
 
-- 현재 block-server는 컨트롤러와 테스트에서 `/v1` 프리픽스를 직접 사용하고 있다.
+- 현재 editor-service는 컨트롤러와 테스트에서 `/v1` 프리픽스를 직접 사용하고 있다.
 - 운영 구조상 외부 트래픽은 gateway를 통해서만 유입된다.
 - 인증 헤더(`X-User-Id`) 신뢰 경계도 gateway에 맞춰져 있다.
 
 ## 검토 범위
 
 - 외부 공개 경로와 내부 서비스 경로의 버전 프리픽스 분리 전략
-- gateway rewrite 기준과 block-server 수정 범위
+- gateway rewrite 기준과 editor-service 수정 범위
 
 ## 핵심 질문
 
@@ -34,7 +34,7 @@
 
 #### 개요
 
-- gateway와 block-server 모두 `/v1` 경로를 사용한다.
+- gateway와 editor-service 모두 `/v1` 경로를 사용한다.
 
 #### 시나리오
 
@@ -61,8 +61,8 @@
 #### 시나리오
 
 1. 클라이언트가 gateway의 `PATCH /v1/documents/{documentId}`를 호출한다.
-2. gateway가 `/v1`를 제거해 `PATCH /documents/{documentId}`로 block-server에 전달한다.
-3. block-server는 내부 표준 경로(`/documents/**`, `/workspaces/**`, `/admin/**`)로 요청을 처리한다.
+2. gateway가 `/v1`를 제거해 `PATCH /documents/{documentId}`로 editor-service에 전달한다.
+3. editor-service는 내부 표준 경로(`/documents/**`, `/workspaces/**`, `/admin/**`)로 요청을 처리한다.
 
 #### 장점
 
@@ -88,7 +88,7 @@
 ## 현재 추천 방향
 
 - 선택지 2 채택
-- block-server의 `/v1` 프리픽스를 제거한다.
+- editor-service의 `/v1` 프리픽스를 제거한다.
 - gateway rewrite를 요구사항에 명시한다.
 
 ## 미해결 쟁점
@@ -104,6 +104,6 @@
 
 ## 관련 문서
 
-- [016-remove-v1-prefix-from-internal-apis.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/016-remove-v1-prefix-from-internal-apis.md)
-- [REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
-- [2026-03-27-internal-api-remove-v1-prefix.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-27-internal-api-remove-v1-prefix.md)
+- [016-remove-v1-prefix-from-internal-apis.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/016-remove-v1-prefix-from-internal-apis.md)
+- [REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)
+- [2026-03-27-internal-api-remove-v1-prefix.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-27-internal-api-remove-v1-prefix.md)

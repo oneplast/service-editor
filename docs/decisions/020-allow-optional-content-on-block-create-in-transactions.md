@@ -38,6 +38,6 @@ debounce 또는 `Ctrl+S` flush 시점에는 이미 브라우저 로컬 state에 
 
 ## 관련 문서
 
-- [2026-04-01-block-create-initial-content-review.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-04-01-block-create-initial-content-review.md)
-- [2026-03-20-editor-transaction-dto-and-frontend-queue-spec.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-20-editor-transaction-dto-and-frontend-queue-spec.md)
-- [REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
+- [2026-04-01-block-create-initial-content-review.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-04-01-block-create-initial-content-review.md)
+- [2026-03-20-editor-transaction-dto-and-frontend-queue-spec.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-20-editor-transaction-dto-and-frontend-queue-spec.md)
+- [REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)

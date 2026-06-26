@@ -69,7 +69,7 @@
 - 증상: `prompts/topics/`에 상세 디버깅 절차나 반복 실수 설명을 길게 넣는다.
 - 원인: topic을 운영 문서가 아니라 인덱스라는 점을 잊었다.
 - 복구: topic에는 링크와 짧은 현재 기준만 남기고, 절차형 내용은 runbook이나 공식 문서로 옮긴다.
-- 방지: topic 수정 전 [prompts/topics/README.md](https://github.com/jho951/Block-server/blob/dev/prompts/topics/README.md)를 다시 확인한다.
+- 방지: topic 수정 전 [prompts/topics/README.md](https://github.com/oneplast/service-editor/blob/dev/prompts/topics/README.md)를 다시 확인한다.
 
 ### 5. 규칙 중복 복제
 

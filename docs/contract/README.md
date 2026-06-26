@@ -5,7 +5,7 @@
 ## Source
 | 항목            | 값                                        |
 |---------------|------------------------------------------|
-| Repo          | https://github.com/jho951/editor-service |
+| Repo          | https://github.com/oneplast/service-editor |
 | Branch        | `main`                                   |
 | Contract Lock | `contract.lock.yml`                      |
 

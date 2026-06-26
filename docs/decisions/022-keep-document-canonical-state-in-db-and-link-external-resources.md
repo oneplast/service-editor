@@ -39,6 +39,6 @@
 
 ## 관련 문서
 
-- [REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
-- [document-resource-boundary-and-transaction-flow.md](https://github.com/jho951/Block-server/blob/dev/docs/explainers/document-resource-boundary-and-transaction-flow.md)
-- [contract-change-guideline.md](https://github.com/jho951/Block-server/blob/dev/docs/guides/contract/contract-change-guideline.md)
+- [REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)
+- [document-resource-boundary-and-transaction-flow.md](https://github.com/oneplast/service-editor/blob/dev/docs/explainers/document-resource-boundary-and-transaction-flow.md)
+- [contract-change-guideline.md](https://github.com/oneplast/service-editor/blob/dev/docs/guides/contract/contract-change-guideline.md)

@@ -3,7 +3,7 @@
 ## 문서 목적
 
 - Gateway 인증 완료 후 `X-User-Id`를 신뢰 헤더로 사용하는 운영 방식을 정리한다.
-- Block-server에서 누락/빈값 처리와 감사 로그 기준을 합의한다.
+- editor-service에서 누락/빈값 처리와 감사 로그 기준을 합의한다.
 - 본 문서는 채택 전 검토 메모다.
 
 ## 배경
@@ -56,7 +56,7 @@
 #### 시나리오
 
 1. Gateway가 외부 `X-User-Id`를 제거하고 인증 성공 시 재주입한다.
-2. Block-server 인터셉터가 `X-User-Id` 누락/빈값을 즉시 `401`로 차단한다.
+2. editor-service 인터셉터가 `X-User-Id` 누락/빈값을 즉시 `401`로 차단한다.
 3. `X-Request-Id`가 없으면 서버에서 생성하고 응답 헤더에 반환한다.
 4. 요청 종료 시 `userId + requestId`를 포함한 감사 로그를 남긴다.
 
@@ -84,7 +84,7 @@
 
 ## 미해결 쟁점
 
-1. Gateway -> Block-server 네트워크 차단 정책은 인프라 IaC 저장소에서 별도 검증 필요
+1. Gateway -> editor-service 네트워크 차단 정책은 인프라 IaC 저장소에서 별도 검증 필요
 
 ## 다음 액션
 
@@ -94,5 +94,5 @@
 
 ## 관련 문서
 
-- [015-trust-gateway-injected-user-header-and-enforce-request-audit.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/015-trust-gateway-injected-user-header-and-enforce-request-audit.md)
-- [REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
+- [015-trust-gateway-injected-user-header-and-enforce-request-audit.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/015-trust-gateway-injected-user-header-and-enforce-request-audit.md)
+- [REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)

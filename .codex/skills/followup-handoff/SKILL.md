@@ -17,7 +17,7 @@ description: "긴 작업이나 세션 복구가 필요한 작업에서 followup 
 
 ## 절차
 
-1. `AGENTS.md`와 [docs/followup/README.md](https://github.com/jho951/Block-server/blob/dev/docs/followup/README.md)를 먼저 확인한다.
+1. `AGENTS.md`와 [docs/followup/README.md](https://github.com/oneplast/service-editor/blob/dev/docs/followup/README.md)를 먼저 확인한다.
 2. followup 파일이 없으면 `docs/followup/active/<slug>.md`를 템플릿으로 만든다.
 3. followup 파일에는 `목표`, `고정 제약`, `읽은 기준 문서`, `현재 파일 범위`, `현재 상태`, `다음 작업`만 남긴다. 코드/계약 변경 작업이면 `현재 상태` 안에 `검증 단계: 진행 중` 또는 `검증 단계: 검증 대기`를 적는다.
 4. 새 사실이 생기면 뒤에 누적하지 말고 현재 상태 기준으로 다시 쓴다.

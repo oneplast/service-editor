@@ -6,14 +6,14 @@
 
 - 월 단위 디렉토리를 사용한다.
 - 예:
-  - [prompts/worklog/2026-03/](https://github.com/jho951/Block-server/tree/dev/prompts/worklog/2026-03)
-  - [prompts/worklog/2026-04/](https://github.com/jho951/Block-server/tree/dev/prompts/worklog/2026-04)
+  - [prompts/worklog/2026-03/](https://github.com/oneplast/service-editor/tree/dev/prompts/worklog/2026-03)
+  - [prompts/worklog/2026-04/](https://github.com/oneplast/service-editor/tree/dev/prompts/worklog/2026-04)
 
 ## 파일명 규칙
 
 - 파일명은 `YYYY-MM-DD-goal.md` 형식을 기본으로 한다.
 - 같은 사용자 목표의 후속 작업은 새 파일을 만들기보다 기존 파일에 `Step`으로 누적한다.
-- 새 worklog를 만들 때는 [TEMPLATE.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/TEMPLATE.md) 형식을 기준으로 한다.
+- 새 worklog를 만들 때는 [TEMPLATE.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/TEMPLATE.md) 형식을 기준으로 한다.
 
 ## 작성 원칙
 

@@ -49,5 +49,5 @@
 
 ## 관련 문서
 
-- [2026-03-19-block-structured-content-strategy.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-19-block-structured-content-strategy.md)
-- [REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
+- [2026-03-19-block-structured-content-strategy.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-19-block-structured-content-strategy.md)
+- [REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)

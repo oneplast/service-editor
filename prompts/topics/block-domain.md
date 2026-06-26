@@ -6,23 +6,23 @@
 
 ## 관련 worklog
 
-- [2026-03-17-block-create.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-17-block-create.md)
-- [2026-03-17-block-list-read.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-17-block-list-read.md)
-- [2026-03-18-block-entity-relations.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-18-block-entity-relations.md)
-- [2026-03-18-block-update-and-move.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-18-block-update-and-move.md)
-- [2026-03-19-block-delete-api-implementation.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-19-block-delete-api-implementation.md)
-- [2026-03-19-block-structured-content-migration.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-19-block-structured-content-migration.md)
-- [2026-03-20-block-restore-policy.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-20-block-restore-policy.md)
+- [2026-03-17-block-create.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-17-block-create.md)
+- [2026-03-17-block-list-read.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-17-block-list-read.md)
+- [2026-03-18-block-entity-relations.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-18-block-entity-relations.md)
+- [2026-03-18-block-update-and-move.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-18-block-update-and-move.md)
+- [2026-03-19-block-delete-api-implementation.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-19-block-delete-api-implementation.md)
+- [2026-03-19-block-structured-content-migration.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-19-block-structured-content-migration.md)
+- [2026-03-20-block-restore-policy.md](https://github.com/oneplast/service-editor/blob/dev/prompts/worklog/2026-03/2026-03-20-block-restore-policy.md)
 
 ## 관련 문서
 
-- [docs/REQUIREMENTS.md](https://github.com/jho951/Block-server/blob/dev/docs/REQUIREMENTS.md)
-- [docs/discussions/2026-03-19-block-structured-content-strategy.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-19-block-structured-content-strategy.md)
-- [docs/discussions/2026-03-20-block-restore-policy-review.md](https://github.com/jho951/Block-server/blob/dev/docs/discussions/2026-03-20-block-restore-policy-review.md)
-- [docs/decisions/010-map-block-hierarchy-with-jpa-associations-and-db-cascade.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/010-map-block-hierarchy-with-jpa-associations-and-db-cascade.md)
-- [docs/decisions/011-separate-block-update-from-move-api.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/011-separate-block-update-from-move-api.md)
-- [docs/decisions/012-adopt-structured-text-content-and-staged-concurrency-roadmap.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/012-adopt-structured-text-content-and-staged-concurrency-roadmap.md)
-- [docs/decisions/013-adopt-session-scoped-browser-undo-and-drop-block-restore-api.md](https://github.com/jho951/Block-server/blob/dev/docs/decisions/013-adopt-session-scoped-browser-undo-and-drop-block-restore-api.md)
+- [docs/REQUIREMENTS.md](https://github.com/oneplast/service-editor/blob/dev/docs/REQUIREMENTS.md)
+- [docs/discussions/2026-03-19-block-structured-content-strategy.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-19-block-structured-content-strategy.md)
+- [docs/discussions/2026-03-20-block-restore-policy-review.md](https://github.com/oneplast/service-editor/blob/dev/docs/discussions/2026-03-20-block-restore-policy-review.md)
+- [docs/decisions/010-map-block-hierarchy-with-jpa-associations-and-db-cascade.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/010-map-block-hierarchy-with-jpa-associations-and-db-cascade.md)
+- [docs/decisions/011-separate-block-update-from-move-api.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/011-separate-block-update-from-move-api.md)
+- [docs/decisions/012-adopt-structured-text-content-and-staged-concurrency-roadmap.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/012-adopt-structured-text-content-and-staged-concurrency-roadmap.md)
+- [docs/decisions/013-adopt-session-scoped-browser-undo-and-drop-block-restore-api.md](https://github.com/oneplast/service-editor/blob/dev/docs/decisions/013-adopt-session-scoped-browser-undo-and-drop-block-restore-api.md)
 
 ## 현재 기준
 
