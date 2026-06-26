@@ -280,7 +280,9 @@ run_gradle_verification() {
 
   if [ ${#regular_tasks[@]} -gt 0 ]; then
     printf 'Gradle 테스트 실행: ./gradlew %s\n' "${regular_tasks[*]}"
-    ./gradlew "${regular_tasks[@]}"
+    if ! ./gradlew "${regular_tasks[@]}"; then
+      return 1
+    fi
   fi
   if [ "$has_boot_test" = true ]; then
     printf '[INFO] 제외 테스트: %s\n' "$excluded_boot_test"
@@ -288,8 +290,12 @@ run_gradle_verification() {
     for task in "${boot_test_classes[@]}"; do
       test_args+=(--tests "$task")
     done
-    ./gradlew "${test_args[@]}"
+    if ! ./gradlew "${test_args[@]}"; then
+      return 1
+    fi
   fi
+
+  return 0
 }
 
 dependency_fingerprint=$(gate_fingerprint_lines "${dependency_paths[@]}")
