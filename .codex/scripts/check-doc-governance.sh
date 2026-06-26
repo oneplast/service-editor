@@ -14,6 +14,7 @@ result_file=""
 search_excludes_file=".codex/config/doc-governance-search-excludes.txt"
 search_exclude_args=()
 failures=0
+supported_change_kinds="doc-governance-change | workflow-contract-change | followup-policy-change | runbook-policy-change | prompt-governance-change | workflow-implementation-change | repeated-error-case-update | non-contract-doc | content-only"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -94,7 +95,7 @@ if [ -z "$change_kind" ]; then
   gate_print_unclassified \
     '문서 거버넌스 변경 성격' \
     '거버넌스 후보 경로가 있지만 명시된 변경 성격이 없습니다.' \
-    'doc-governance-change | workflow-contract-change | workflow-implementation-change | content-only' \
+    "$supported_change_kinds" \
     '사용자 요청과 현재 scope diff' \
     'change-kind 입력'
   gate_write_result "$result_file" doc-governance UNCLASSIFIED unknown "$scope_fingerprint" "$scope_fingerprint" \
@@ -115,7 +116,7 @@ case "$change_kind" in
     gate_print_unclassified \
       '문서 거버넌스 변경 성격' \
       "지원하지 않는 변경 성격입니다: $change_kind" \
-      'doc-governance-change | workflow-contract-change | workflow-implementation-change | content-only' \
+      "$supported_change_kinds" \
       '변경 성격 입력' \
       'change-kind 입력'
     gate_write_result "$result_file" doc-governance UNCLASSIFIED "$change_kind" "$scope_fingerprint" "$scope_fingerprint" \

@@ -11,6 +11,7 @@
 - [2026-03-31-troubleshooting-doc-system.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-03/2026-03-31-troubleshooting-doc-system.md)
 - [2026-04-07-docs-governance-dedup-and-readability.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-04/2026-04-07-docs-governance-dedup-and-readability.md)
 - [2026-04-14-followup-harness-and-doc-governance.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-04/2026-04-14-followup-harness-and-doc-governance.md)
+- [2026-06-19-conditional-harness-transition.md](https://github.com/jho951/Block-server/blob/dev/prompts/worklog/2026-06/2026-06-19-conditional-harness-transition.md)
 
 ## 관련 문서
 

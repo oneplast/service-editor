@@ -236,3 +236,35 @@
 | implementation | 6 | 13 | 후보 없음, 미확정, 비활성, 모듈 dry-run, 전체 dry-run, scope 불일치 |
 | retry | 3 | 8 | 선행 `PASS` 재사용, 영향받은 `PASS` 재검증 후보, 잘못된 failure-file 차단 |
 | 합계 | 14 | 31 | 자동화 가능한 대표 게이트 분기 검증 |
+
+---
+
+## Step 8. 최종 정합성 검증과 작업 기록 마감
+
+### 목적
+
+- 1단계부터 7단계까지 만든 조건부 하네스 계약이 서로 충돌하지 않는지 확인하고, 작업 기록을 최종 기준으로 정리한다.
+
+### 변경 내용
+
+- topic에 조건부 하네스 전환 worklog를 연결해 이후 문서·프롬프트 거버넌스 기준에서 바로 찾을 수 있게 했다.
+- `doc-governance-check` skill과 `check-doc-governance.sh`의 안내 문구를 `doc-update-matrix`의 세분화된 change-kind 기준과 맞췄다.
+- active followup은 다음 세션 복구용 최소 상태만 남기도록 다시 정리했다.
+
+### 판단
+
+- `AGENTS.md`가 최상위 계약을 소유하고, README는 경로 라우팅, config는 판정 기준, skill은 절차, script는 자동 검증 실행을 맡는 구조로 유지했다.
+- Direct, Scoped, Harness는 작업 수준 판정이며, 각 게이트는 필요한 경우에만 독립적으로 활성화된다.
+- `DOC_UNDETERMINED`는 문서 영향 미확정 값이고, `UNCLASSIFIED`는 게이트 실행 상태로 분리되어 있다.
+- subagent는 상시 분업자가 아니라 main-owned selective orchestration의 bounded capability로 남겼다.
+- commit 보조 skill은 사용자가 명시적으로 요청할 때 쓰는 편의 절차이며, 하네스 기본 파이프라인에는 연결하지 않는다.
+
+### 검증
+
+- 규칙 충돌 후보 검색으로 오래된 `REVIEW`, `git-add`, `/commit-*`, `./commit-*`, subagent 후속 임시 문구가 공식 계약 경로에 남아 있지 않은지 확인했다.
+- Direct, Scoped, subagent, doc-impact처럼 script로 직접 증명하기 어려운 메인 행동 계약은 `AGENTS.md`, `.codex/README.md`, config, skill의 소유 경계를 대조했다.
+- `git diff --check`를 통과했다.
+- 모든 shell script의 `bash -n` 문법 검사를 통과했다.
+- `bash .codex/scripts/check-harness-scenarios.sh`를 실행해 31개 assertion이 모두 통과했다.
+- `workflow-contract-change`와 `prompt-governance-change` 기준 문서 거버넌스 검증을 통과했다.
+- `non-contract-doc` 기준 구현 검증 게이트 비활성을 확인했다.

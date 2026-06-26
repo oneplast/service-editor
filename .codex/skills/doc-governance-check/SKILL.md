@@ -7,7 +7,7 @@ description: "문서 체계나 규칙 변경 뒤 최신화 대상과 제외 대�
 
 이 skill은 문서 체계나 규칙 변경 후, 기존 문서 규칙을 기준으로 최신화 대상과 제외 대상을 판별하고 자동 검증하는 절차다.
 
-이 skill은 코드·설정 변경의 문서 영향을 판정하거나 `doc-update`를 활성화하지 않는다. `doc-governance-change` 또는 `workflow-contract-change`로 확정된 변경의 동반 문서와 규칙 정합성만 검증한다.
+이 skill은 코드·설정 변경의 문서 영향을 판정하거나 `doc-update`를 활성화하지 않는다. 메인 에이전트가 문서 체계·규칙·workflow 계약 변경으로 확정한 변경의 동반 문서와 규칙 정합성만 검증한다.
 
 ## 사용할 때
 
@@ -23,7 +23,7 @@ description: "문서 체계나 규칙 변경 뒤 최신화 대상과 제외 대�
 ## 절차
 
 1. 관련 파일 변경을 마친다.
-2. 메인 에이전트가 확정한 변경 성격이 `doc-governance-change` 또는 `workflow-contract-change`인지 확인한다. 입력과 scope·diff가 어긋나면 `.codex/config/gate-state-contract.md` 형식으로 `UNCLASSIFIED`를 반환한다.
+2. 메인 에이전트가 확정한 변경 성격이 `.codex/config/doc-update-matrix.md`의 문서 거버넌스 계열 변경인지 확인한다. 입력과 scope·diff가 어긋나면 `.codex/config/gate-state-contract.md` 형식으로 `UNCLASSIFIED`를 반환한다.
 3. `.codex/config/doc-update-matrix.md`에서 해당 게이트의 최신화 기준과 편집 모드를 확인한다.
 4. scope와 확정한 변경 성격을 `--scope-file`, `--change-kind`로 명시해 `.codex/scripts/check-doc-governance.sh`를 실행한다. 긴 작업이면 `--result-file`을 `docs/followup/active/.state/`에 둔다.
 5. 스크립트 출력에서 빠진 동반 문서나 금지 경로 참조가 있으면 해당 파일을 다시 고친다.
