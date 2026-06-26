@@ -268,3 +268,77 @@
 - `bash .codex/scripts/check-harness-scenarios.sh`를 실행해 31개 assertion이 모두 통과했다.
 - `workflow-contract-change`와 `prompt-governance-change` 기준 문서 거버넌스 검증을 통과했다.
 - `non-contract-doc` 기준 구현 검증 게이트 비활성을 확인했다.
+
+---
+
+## Step 9. 조건부 하네스 실사용 수용 검증
+
+### 목적
+
+- before/after troubleshooting 비교 실험으로 넘어가기 전에, 현재 조건부 하네스가 5가지 우선사항을 실제 작업 흐름에서 만족하는지 확인한다.
+
+### 변경 내용
+
+- 9단계를 구조 비교 실험이 아니라 현재 하네스 수용 검증으로 분리했다.
+- 자동 검증 가능한 script 분기와 에이전트 행동 계약을 별도 축으로 나눴다.
+- 선택적 subagent 호출 검증은 quoted excerpt만 전달하는 bounded 독립 리뷰 1건으로 제한했다.
+
+### 판단
+
+- 1~8단계는 구조 구축과 자동화 가능한 회귀 검증이고, 9단계는 실사용 시나리오에서 하네스가 의도대로 작동하는지 확인하는 acceptance validation이다.
+- Direct, Scoped, doc-impact, subagent 호출 판단은 shell script만으로 완전히 증명하기 어렵기 때문에 계약 대조와 실제 세션 관찰을 함께 사용한다.
+- 수치화된 before/after 비교, 토큰 추정 알고리즘 적용, 구조별 trial 반복은 기존 troubleshooting 비교 실험에서 별도로 수행한다.
+
+### 수용 검증 시나리오
+
+| 시나리오 | 기대 작업 수준 | 기대 게이트 | 확인 방식 | 수용 기준 |
+| --- | --- | --- | --- | --- |
+| 단순 질의 또는 상태 확인 | Direct | 추가 게이트 없음 | 세션 행동 관찰 | README, skill, script, runbook, prompts, subagent를 열지 않는다. |
+| 특정 파일·경로의 작은 수정 | Scoped | path-rule 또는 대상 경로 README만 | 세션 행동 관찰 | 지정 범위와 직접 관련 파일을 넘어 확장하지 않는다. |
+| 코드 변경 후 문서 영향 없음 | Scoped 또는 Harness | doc-impact = `DOC_NONE` | 계약 대조와 diff 판단 | 문서 최신화를 위한 추가 탐색과 수정을 하지 않는다. |
+| API·설정·정책 변경 | Harness | doc-impact = `DOC_REQUIRED`, 필요 시 docs-routing/doc-update | 계약 대조와 diff 판단 | 필요한 공식 문서만 좁게 읽고 갱신한다. |
+| 문서 영향 불명확 | Harness | doc-impact = `DOC_UNDETERMINED` | 계약 대조 | 최소 공식 문서 후보 확인 전 완료하지 않는다. |
+| 문서 체계·workflow 계약 변경 | Harness | doc-governance | script와 계약 대조 | `doc-update`와 섞지 않고 동반 문서 정합성만 검증한다. |
+| 구현 의미 변경 | Harness | implementation-verification | script dry-run 또는 run | scope에 맞는 구현 검증만 선택한다. |
+| 검증 성공 | Harness | retry/runbook 비활성 | script 시나리오 | 성공 결과만으로 retry나 runbook을 열지 않는다. |
+| 검증 실패 | Harness | verification-retry, 필요 시 runbook | script 시나리오 | 실패 정보 기반으로 같은 검증 또는 영향받은 선행 PASS만 재개한다. |
+| 독립 bounded 분석 | Harness | subagent 선택 호출 | 실제 subagent smoke/review | 중복 컨텍스트 비용보다 이득이 있을 때만 packet으로 호출한다. |
+| 단일 문서 읽기 또는 메인이 이미 아는 범위 | Direct 또는 Scoped | subagent 미호출 | 계약 대조 | subagent를 기본 실행자로 쓰지 않는다. |
+
+### 5가지 우선사항 판정표
+
+| 우선사항 | 현재 수용 기준 | 현재 판정 |
+| --- | --- | --- |
+| 토큰 절약 | 작은 충분 컨텍스트로 시작하고, 필요 없는 문서·skill·script·subagent를 열지 않는다. | PASS |
+| 문서 정합성 | `DOC_REQUIRED`일 때만 필요한 공식 문서를 좁게 갱신하고, 문서 체계 변경은 `doc-governance`로 별도 검증한다. | PASS |
+| 안정적인 파이프라인 | `FAIL`, `UNCLASSIFIED`, retry, runbook, PASS 재사용 경계가 끊기지 않는다. | PASS |
+| 요구사항 준수 | `AGENTS.md`와 경로 README의 소유 규칙을 유지하고, 사용자 확인이 필요한 결정은 임의 확정하지 않는다. | PASS |
+| 중복 조회/호출 최소화 | 같은 기준 문서를 반복해서 읽지 않고, subagent와 메인이 같은 전체 문맥을 중복 조회하지 않는다. | PASS |
+
+### 검증
+
+- Direct 질의 관찰: "남은 작업이 길어서 일부만 진행한 것인지" 질문에는 추가 파일, skill, script, runbook, prompts, subagent를 열지 않고 세션 상태만으로 답했다.
+- Scoped/Harness 문서 작업 관찰: 9단계 worklog 보강에서는 `prompts/` 경로를 직접 수정하므로 `prompts/README.md`와 `prompts/worklog/README.md`만 확인했고, troubleshooting 비교 실험 문서는 수정하지 않았다.
+- Scoped 문서 수정 관찰: 9단계 worklog 보강은 기존 목표의 같은 worklog 파일 1개만 수정했고, topic·troubleshooting·제품 문서로 확장하지 않았다.
+- 통제된 doc-impact 판정 시나리오로 `DOC_NONE`, `DOC_REQUIRED`, `DOC_UNDETERMINED`의 분기 기준을 확인했다.
+- subagent 독립 리뷰는 quoted excerpt만 사용하도록 제한했다.
+- subagent 결과는 `PASS`이며, main-owned selective subagent orchestration과 충돌되는 문구가 없다고 보고했다.
+- `git diff --check`를 통과했다.
+- 모든 shell script의 `bash -n` 문법 검사를 통과했다.
+- `bash .codex/scripts/check-harness-scenarios.sh`를 실행해 31개 assertion이 모두 통과했다.
+- `prompt-governance-change` 기준 문서 거버넌스 검증을 통과했다.
+- `non-contract-doc` 기준 구현 검증 게이트 비활성을 확인했다.
+
+### doc-impact 수용 판정
+
+| 통제 시나리오 | 기대 판정 | 수용 판단 |
+| --- | --- | --- |
+| 현재 요구사항과 계약 안의 내부 리팩터링 또는 테스트 보강 | `DOC_NONE` | 문서 최신화를 위한 `docs/README.md`, REQUIREMENTS, guide, ADR 추가 읽기를 하지 않는 흐름이 맞다. |
+| API 요청·응답·에러, 인증·권한, 설정 키, 실행 명령, 모듈 경계가 바뀌는 변경 | `DOC_REQUIRED` | `docs-routing`과 `doc-update`를 열고 영향받는 공식 문서만 좁게 읽는 흐름이 맞다. |
+| 사용자 요청과 diff만으로 외부 계약 또는 문서화된 절차 변경 여부를 확정할 수 없는 변경 | `DOC_UNDETERMINED` | 완료를 보류하고 직접 관련된 공식 문서 후보만 최소 확인한 뒤 `DOC_REQUIRED` 또는 `DOC_NONE`으로 재분류하는 흐름이 맞다. |
+
+### 남은 수용 검증
+
+- 실제 제품 코드 변경을 일부러 만들지는 않는다.
+- 이후 자연 발생하는 실제 코드 변경 작업에서 `DOC_NONE`, `DOC_REQUIRED`, `DOC_UNDETERMINED` 판정 사례가 나오면 같은 Step에 추가 보강한다.
+- 수치화된 토큰 절약과 before/after 구조 비교는 troubleshooting 비교 실험에서 수행한다.
