@@ -342,3 +342,42 @@
 - 실제 제품 코드 변경을 일부러 만들지는 않는다.
 - 이후 자연 발생하는 실제 코드 변경 작업에서 `DOC_NONE`, `DOC_REQUIRED`, `DOC_UNDETERMINED` 판정 사례가 나오면 같은 Step에 추가 보강한다.
 - 수치화된 토큰 절약과 before/after 구조 비교는 troubleshooting 비교 실험에서 수행한다.
+
+---
+
+## Step 10. 임시 worktree 기반 실전 코드 변경 시나리오 검증
+
+### 목적
+
+- 현재 브랜치를 오염시키지 않고 disposable worktree에서 실제 코드 변경 시나리오를 수행해, 조건부 하네스가 코드 변경 복잡도별로 적절히 분기되는지 확인한다.
+
+### 변경 내용
+
+- 기준 커밋 `0cb6289`에서 임시 worktree를 만들고, 시나리오별 변경을 현재 브랜치에 남기지 않는 방식으로 검증했다.
+- `DOC_NONE`, `DOC_REQUIRED`, `DOC_UNDETERMINED` 재분류, 복잡한 다중 범위 변경의 subagent bounded 리뷰를 분리해 관찰했다.
+- 실험 코드 변경은 폐기 대상으로 두고, 현재 브랜치에는 관찰 결과만 기록한다.
+
+### 시나리오 결과
+
+| 시나리오 | 임시 변경 | 기대 분기 | 관찰 결과 |
+| --- | --- | --- | --- |
+| `DOC_NONE` 테스트 보강 | `TextNormalizerTest`에 nullable trim 테스트 추가 | 문서 갱신 없음, 최소 구현 검증 | 문서 거버넌스 비활성, `verification-only` dry-run이 `:documents-infrastructure:test`를 선택했다. |
+| `DOC_REQUIRED` 에러 계약 변경 | `DOCUMENT_TITLE_TOO_LONG` 비즈니스/API 에러 코드 추가, REQUIREMENTS와 error contract 갱신 | 문서 갱신 필요, 구현 검증 필요, doc-governance 비활성 | `implementation-change` dry-run이 root `test`를 선택했고, 문서 체계 변경이 아니므로 doc-governance는 비활성으로 유지됐다. |
+| `DOC_UNDETERMINED` 재분류 | `CreateDocumentRequest`의 title max를 `255 -> 120`으로 변경 | 최소 공식 문서 확인 후 `DOC_REQUIRED` 재분류 | REQUIREMENTS에 title 최대 길이 `255`가 있어 완료 보류 후 REQUIREMENTS만 좁게 갱신하는 흐름으로 재분류했다. |
+| 복잡한 다중 범위 변경 subagent 리뷰 | 에러 코드와 공식 문서 동반 변경 요약을 quoted context로 전달 | 선택적 bounded subagent 호출 | subagent는 동반 문서 누락 없음 `PASS`를 반환했고, 메인이 `9018` 중복과 심볼명 일치를 최소 확인했다. |
+
+### 판단
+
+- 코드 변경 복잡도가 올라갈수록 `Scoped -> Harness`, `DOC_NONE -> DOC_REQUIRED`, 구현 검증 범위가 달라지는 흐름이 관찰됐다.
+- 제품 계약 변경에서는 `doc-update`가 필요하지만, 문서 체계나 workflow 계약 변경이 아니면 `doc-governance`를 자동 활성화하지 않는 설계가 유지됐다.
+- `DOC_UNDETERMINED`는 완료가 아니라 최소 공식 문서 후보 확인으로 이어지는 보류 상태로 작동한다.
+- subagent는 전체 하네스를 다시 읽지 않고, 다중 범위 변경의 누락 후보를 확인하는 bounded 리뷰로만 사용했다.
+- 실제 Gradle 테스트 실행은 worktree 환경의 `JAVA_HOME` 미설정으로 수행하지 못했고, 구현 검증은 dry-run 범위 선택까지만 확인했다.
+
+### 검증
+
+- `DOC_NONE` 시나리오에서 `check-doc-implementation --change-kind verification-only --dry-run`이 `:documents-infrastructure:test`를 선택했다.
+- `DOC_REQUIRED` 시나리오에서 `check-doc-implementation --change-kind implementation-change --dry-run`이 root `test`를 선택했다.
+- `DOC_UNDETERMINED` 재분류 시나리오에서 `check-doc-implementation --change-kind implementation-change --dry-run`이 `:documents-api:test`를 선택했다.
+- 각 시나리오에서 `check-doc-governance --change-kind content-only`는 문서 체계 변경이 아니므로 비활성 `PASS`를 반환했다.
+- subagent bounded 리뷰 결과는 `PASS`였고, 메인이 `9018`과 `DOCUMENT_TITLE_TOO_LONG`의 임시 변경 범위 내 일치를 확인했다.
