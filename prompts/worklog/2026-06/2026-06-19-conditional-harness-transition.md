@@ -24,6 +24,8 @@
 - 문서 거버넌스 검증 PASS
 - 스크립트 파일에 실행 권한이 없어 직접 실행은 실패했고, `bash` 실행으로 검증했다. 실행 진입 방식은 검증 스크립트 전환 단계에서 다시 확인한다.
 
+---
+
 ## Step 2. 문서·복구 skill 활성화 조건 경량화
 
 ### 목적
@@ -50,6 +52,8 @@
 - `bash .codex/scripts/check-doc-implementation.sh --scope-file docs/followup/active/conditional-harness-transition.scope --followup-file docs/followup/active/conditional-harness-transition.md`
 - runbook 절차 변경 검토 안내와 자동 실행 테스트 없음 확인
 - 이전 선행 로드 문구 검색 결과 없음
+
+---
 
 ## Step 3. 문서·구현 검증 게이트 판별 계약 분리
 
@@ -97,6 +101,8 @@
 - 구현 의미 변경 문서가 없어 구현 검증 불필요 확인
 - `git diff --check` PASS
 
+---
+
 ## Step 4. 검증 스크립트 독립 조건부 게이트 전환
 
 ### 목적
@@ -133,6 +139,8 @@
 - 실제 문서 거버넌스 `FAIL` 결과를 수정된 scope로 재개해 실패 원본 보존과 `.retry` PASS 결과 생성을 확인했다.
 - 현재 4단계 scope의 문서 거버넌스 검증을 통과했고 구현 검증 게이트가 불필요함을 확인했다.
 
+---
+
 ## Step 5. 메인·서브 에이전트 역할과 호출 계약 정의
 
 ### 목적
@@ -161,6 +169,8 @@
 
 - 문서 거버넌스 검증을 통과했다.
 - `git diff --check`를 통과했다.
+
+---
 
 ## Step 6. 조건부 서브 에이전트 오케스트레이션 절차 연결
 
@@ -191,6 +201,8 @@
 - 단일 read command를 명시 허용한 뒤 `.codex/config/subagent-task-contract.md`만 읽고 선택적 subagent orchestration 핵심 조건을 확인하는 smoke test가 `PASS`로 끝났다.
 - 문서 거버넌스 검증을 통과했다.
 - `git diff --check`를 통과했다.
+
+---
 
 ## Step 7. 조건부 하네스 게이트 시나리오 검증 추가
 
