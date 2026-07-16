@@ -25,6 +25,10 @@
 - 파일은 누적 로그가 아니라 현재 상태 스냅샷으로 유지한다.
 - 새 사실이 생기면 계속 덧붙이지 말고, 완료된 내용은 줄이고 최신 상태만 남긴다.
 - 관련 없는 여러 작업을 한 파일에 섞지 않는다.
+- 새 active 파일을 만들기 전에는 기존 `docs/followup/active/*.md`를 먼저 확인하고, 같은 작업 축이면 기존 파일을 최신 상태로 다시 쓴다.
+- 현재 active 작업과 다른 짧은 부작업이 끼어들었고 재개 순서가 헷갈릴 수 있으면, 새 파일을 만들지 말고 active 파일에 현재 중단 지점과 재개 순서만 짧게 반영한다.
+- 긴 검증, 여러 run, 외부 실행, 장기 실행처럼 압축 전에 상태가 유실될 수 있는 단계로 들어가기 전에는 active 파일 갱신 필요 여부를 먼저 판단한다.
+- 세션 압축 또는 재개 뒤에는 active 파일이 있으면 먼저 읽고, 압축 요약이나 현재 세션 요약과 충돌하는 부분이 없는지 대조한다.
 - 다음 세션에서 이 파일 하나만 읽어도 바로 재개할 수 있어야 한다.
 - 반복 절차가 필요하면 [`.codex/skills/followup-handoff/SKILL.md`](https://github.com/oneplast/service-editor/blob/dev/.codex/skills/followup-handoff/SKILL.md)를 따른다.
 - 문서 영향 판정과 공식 문서 갱신 대상은 [`.codex/config/doc-update-matrix.md`](https://github.com/oneplast/service-editor/blob/dev/.codex/config/doc-update-matrix.md)를 따른다.
