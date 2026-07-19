@@ -1,0 +1,40 @@
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/followup_compact_guard.py\" pre-compact",
+            "statusMessage": "Checking active followup before compact"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/followup_compact_guard.py\" post-compact",
+            "statusMessage": "Restoring active followup after compact"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/followup_compact_guard.py\" session-start",
+            "statusMessage": "Checking active followup on session start"
+          }
+        ]
+      }
+    ]
+  }
+}

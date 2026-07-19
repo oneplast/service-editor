@@ -6,6 +6,10 @@
 - `.codex/`는 모든 작업의 기본 진입 경로가 아니다. `skill`, `script`, 검증, 실패 복구 게이트가 활성화됐을 때 필요한 파일만 읽는다.
 - `.codex/skills/`에는 반복 가능한 작업 절차만 두고, 각 `SKILL.md`는 최소 YAML frontmatter(`name`, `description`)를 포함한다.
 - skill의 발동 조건을 만족해 읽었더라도 관련 config와 script를 자동으로 모두 읽거나 실행하지 않는다.
+- `.codex/hooks.json`과 `.codex/hooks/`에는 Codex lifecycle hook을 둔다. hook은 정책 원본이 아니라 누락 방지 보조 가드이며, 의미 있는 절차와 판단은 `AGENTS.md`, README, skill이 소유한다.
+- compact guard는 active followup 자동 갱신기가 아니다. active followup과 같은 이름의 `.scope` 대상이 marker 이후 바뀌었는지 확인하고, 복구 상태 확인이 필요하면 경고하거나 scope 오류처럼 복구 기준이 깨진 경우에만 중단한다.
+- project-local hook은 Codex에서 review/trust된 뒤에만 실행된다. compact guard를 기대하는 작업 전에는 `/hooks`에서 신뢰 상태를 확인한다.
+- git worktree나 disposable 작업공간에서 project-local hook에 의존해야 하면, 그 작업공간에서도 hook 로드와 신뢰 상태를 별도로 확인한다.
 - `.codex/scripts/`에는 사람이 직접 실행하거나 skill에서 참조하는 자동 검증 스크립트를 둔다.
 - `.codex/config/`에는 문서 영향 판정, 문서 갱신·거버넌스 기준, 제외 범위, 금지 참조 검사 제외 glob, 구현 검증 트리거, subagent task packet 계약을 둔다.
 - 독립 게이트의 `PASS`, `FAIL`, `UNCLASSIFIED` 공통 상태와 재개 계약은 `.codex/config/gate-state-contract.md`를 원본으로 본다.
@@ -22,6 +26,7 @@
 - skill은 수행 중 발견한 추가 위험을 신호로 반환하며 다른 독립 게이트를 직접 활성화하지 않는다.
 - runbook 경로 후보는 config나 script가 반환할 수 있지만, runbook 게이트 활성화와 실제 기록은 메인 에이전트가 실패 축을 확정한 뒤 수행한다.
 - 프로젝트별 세션 복구와 handoff 기준은 `docs/followup/`을 따른다.
+- context compact 전후 active followup 확인은 hook이 보조할 수 있지만, active 파일 생성·갱신·복구 판단은 `docs/followup/`과 `followup-handoff` skill을 따른다.
 - 문서 체계 검증은 `.codex/scripts/check-doc-governance.sh`, 구현 검증 필요 여부 판별과 테스트 실행은 `.codex/scripts/check-doc-implementation.sh`를 기준으로 한다.
 - 검증 실패 재검증과 메인이 확정한 실패 케이스 기록은 `.codex/config/failure-route-map.md`, `.codex/scripts/verify-and-retry.sh`, `.codex/skills/verification-retry/SKILL.md`를 기준으로 한다.
 - 구현 검증의 경로별 태스크와 로컬 제외 테스트는 `.codex/config/doc-to-code-check-matrix.md`를 원본으로 본다.

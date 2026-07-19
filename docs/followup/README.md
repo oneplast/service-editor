@@ -23,11 +23,15 @@
 
 - 작업마다 파일 하나만 사용한다.
 - 파일은 누적 로그가 아니라 현재 상태 스냅샷으로 유지한다.
+- 새 작업 축을 열거나 active 파일이 없을 때만 전체 구조를 작성한다.
+- 이미 active 파일이 있으면 전체를 다시 쓰지 않고, 다음 세션 복구에 필요한 섹션만 현재 상태로 갱신한다.
 - 새 사실이 생기면 계속 덧붙이지 말고, 완료된 내용은 줄이고 최신 상태만 남긴다.
 - 관련 없는 여러 작업을 한 파일에 섞지 않는다.
 - 새 active 파일을 만들기 전에는 기존 `docs/followup/active/*.md`를 먼저 확인하고, 같은 작업 축이면 기존 파일을 최신 상태로 다시 쓴다.
 - 현재 active 작업과 다른 짧은 부작업이 끼어들었고 재개 순서가 헷갈릴 수 있으면, 새 파일을 만들지 말고 active 파일에 현재 중단 지점과 재개 순서만 짧게 반영한다.
 - 긴 검증, 여러 run, 외부 실행, 장기 실행처럼 압축 전에 상태가 유실될 수 있는 단계로 들어가기 전에는 active 파일 갱신 필요 여부를 먼저 판단한다.
+- compact 전 갱신은 현재 작업 축, 완료·미완료 상태, 다음 재개 지점, 보존해야 할 리소스나 주의점, scope 최신성처럼 복구에 필요한 최소 상태만 다룬다.
+- compact hook이 active followup 확인을 요구하면 `followup-handoff` 절차로 active 파일과 `.scope` 대상을 확인하거나 갱신한 뒤, 복구 가능하다고 판단될 때만 hook guard를 marked 상태로 둔다. marked 상태는 짧은 compact 민감 구간에서만 유효하다.
 - 세션 압축 또는 재개 뒤에는 active 파일이 있으면 먼저 읽고, 압축 요약이나 현재 세션 요약과 충돌하는 부분이 없는지 대조한다.
 - 다음 세션에서 이 파일 하나만 읽어도 바로 재개할 수 있어야 한다.
 - 반복 절차가 필요하면 [`.codex/skills/followup-handoff/SKILL.md`](https://github.com/oneplast/service-editor/blob/dev/.codex/skills/followup-handoff/SKILL.md)를 따른다.
@@ -65,6 +69,7 @@
   - 예: `docs-governance-harness.md`
 - 완료된 작업은 파일을 삭제하거나, 정말 장기 보관 가치가 있으면 `prompts/worklog/` 또는 적절한 공식 문서로 옮긴다.
 - scope 파일은 가능한 한 `docs/followup/active/<slug>.scope`처럼 같은 작업명으로 둔다.
+- compact guard는 active 파일 옆 `.scope`에 적힌 파일 목록의 최신성을 확인한다. `.scope`에는 다음 세션 복구에 필요한 기준 문서, 결과 문서, 상태 파일만 적고 특정 작업의 긴 로그나 임시 출력은 넣지 않는다.
 - 게이트 결과와 PASS fingerprint는 `docs/followup/active/.state/<slug>-<gate>.state`에 두고 followup에는 필요한 경로만 남긴다.
 - `docs/followup/active/`에는 동시에 여러 작업 파일을 쌓지 않는다. 진행 중 작업 기준으로 하나만 유지하는 것을 기본 원칙으로 한다.
 
