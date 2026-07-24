@@ -31,7 +31,7 @@
 - 현재 active 작업과 다른 짧은 부작업이 끼어들었고 재개 순서가 헷갈릴 수 있으면, 새 파일을 만들지 말고 active 파일에 현재 중단 지점과 재개 순서만 짧게 반영한다.
 - 긴 검증, 여러 run, 외부 실행, 장기 실행처럼 압축 전에 상태가 유실될 수 있는 단계로 들어가기 전에는 active 파일 갱신 필요 여부를 먼저 판단한다.
 - compact 전 갱신은 현재 작업 축, 완료·미완료 상태, 다음 재개 지점, 보존해야 할 리소스나 주의점, scope 최신성처럼 복구에 필요한 최소 상태만 다룬다.
-- compact hook이 active followup 확인을 요구하면 `followup-handoff` 절차로 active 파일과 `.scope` 대상을 확인하거나 갱신한 뒤, 복구 가능하다고 판단될 때만 hook guard를 marked 상태로 둔다. marked 상태는 짧은 compact 민감 구간에서만 유효하다.
+- compact hook이 active followup 확인을 요구해 compact가 중단되면 `followup-handoff` 절차로 active 파일과 `.scope` 대상을 확인한다. 복구 상태가 이미 맞으면 갱신하지 않고, 달라진 복구 정보가 있을 때만 필요한 섹션을 짧게 갱신한 뒤 hook guard를 marked 상태로 둔다. marked 상태는 짧은 compact 민감 구간에서만 유효하다.
 - 세션 압축 또는 재개 뒤에는 active 파일이 있으면 먼저 읽고, 압축 요약이나 현재 세션 요약과 충돌하는 부분이 없는지 대조한다.
 - 다음 세션에서 이 파일 하나만 읽어도 바로 재개할 수 있어야 한다.
 - 반복 절차가 필요하면 [`.codex/skills/followup-handoff/SKILL.md`](https://github.com/oneplast/service-editor/blob/dev/.codex/skills/followup-handoff/SKILL.md)를 따른다.

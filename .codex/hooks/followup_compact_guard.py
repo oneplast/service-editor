@@ -266,13 +266,14 @@ def hook_response(mode: str, root: Path) -> int:
             )
         return emit_hook(
             {
-                "continue": True,
-                "stopReason": "active followup should be checked before compact",
+                "continue": False,
+                "stopReason": "active followup must be checked before compact",
                 "systemMessage": (
-                    "context compact 전에 active followup 또는 scope 대상이 최신 marker와 다릅니다. "
-                    f"`{active_path}`를 `followup-handoff` 절차로 확인하고, 현재 목표·제약·상태·다음 작업이 "
-                    "복구 가능한지 대조한 뒤 필요하면 갱신하세요. "
-                    "복구 상태가 맞으면 `python3 .codex/hooks/followup_compact_guard.py mark`를 실행하세요. "
+                    "context compact가 중단됐습니다. "
+                    f"`{active_path}`와 `.scope`를 `followup-handoff` 절차로 확인하세요. "
+                    "현재 목표·제약·상태·다음 작업이 복구 가능하고 바뀐 정보가 없으면 갱신하지 말고, "
+                    "바뀐 복구 정보가 있으면 필요한 섹션만 짧게 갱신하세요. "
+                    "확인 또는 갱신이 끝나면 `python3 .codex/hooks/followup_compact_guard.py mark`를 실행한 뒤 작업을 재개하세요. "
                     f"사유: {reason}"
                 ),
             }

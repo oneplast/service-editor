@@ -22,6 +22,8 @@ compact hook은 누락 방지용 보조 가드다. 의미 있는 상태 판단�
 
 active followup 옆의 `.scope` 파일은 compact guard가 최신성을 확인할 파일 목록이다. active가 있는 긴 작업에서 복구에 필요한 기준 문서, 결과 문서, scope, 실행 상태가 바뀌면 compact marker를 찍기 전에 active followup을 현재 복구 상태와 맞춘다. hook은 active를 자동 작성하지 않고, stale 상태로 compact되는 것을 줄이는 보조 가드로만 본다.
 
+PreCompact hook이 active followup 확인을 요구해 compact를 중단하면, hook을 우회하지 않고 이 skill로 active 파일과 `.scope`를 확인한다. active가 이미 현재 복구 상태와 맞으면 문서를 갱신하지 않고 marker만 찍는다. 목표, 고정 제약, 현재 상태, 다음 작업, 보존해야 할 리소스처럼 다음 세션 복구에 필요한 정보가 달라졌을 때만 해당 섹션을 짧게 갱신한 뒤 marker를 찍는다.
+
 ## 절차
 
 1. `AGENTS.md`와 [docs/followup/README.md](https://github.com/oneplast/service-editor/blob/dev/docs/followup/README.md)를 먼저 확인한다.
@@ -36,7 +38,7 @@ active followup 옆의 `.scope` 파일은 compact guard가 최신성을 확인�
 6. 구현 단계나 검증 단계가 바뀌었더라도 다음 세션 복구에 필요한 정보가 달라진 경우에만 followup 파일을 갱신한다. 세션 중단 위험, 컨텍스트 압축 위험, 토큰 잔량 10% 미만, 복잡한 미완료 작업이 없으면 갱신하지 않는다.
 7. compact 전에는 active 파일을 길게 다시 쓰지 않는다. 복구에 필요한 현재 작업 축, 완료·미완료 상태, 다음 재개 지점, 보존해야 할 리소스나 주의점, `.scope` 최신성만 확인하거나 짧게 갱신한다.
 8. 현재 active 작업과 다른 짧은 부작업이 끼어들었고, 그 부작업 때문에 원래 작업의 중단 지점이나 재개 순서가 헷갈릴 수 있으면 active 파일에 부작업의 상세 이력이 아니라 현재 중단 지점과 재개 순서만 짧게 반영한다.
-9. compact hook이 active followup 확인을 요구하면 이 절차로 active 파일과 `.scope` 대상을 확인하거나 갱신한다. 확인 또는 갱신이 끝났고 복구 가능하다고 판단했을 때만 `python3 .codex/hooks/followup_compact_guard.py mark`를 실행한다. marked 상태는 짧은 compact 민감 구간에서만 유효한 기계적 표시다.
+9. compact hook이 active followup 확인을 요구해 compact가 중단되면 이 절차로 active 파일과 `.scope` 대상을 확인한다. 현재 복구 상태가 이미 맞으면 갱신하지 않고, 달라진 복구 정보가 있으면 필요한 섹션만 짧게 갱신한다. 확인 또는 갱신이 끝났고 복구 가능하다고 판단했을 때만 `python3 .codex/hooks/followup_compact_guard.py mark`를 실행한다. marked 상태는 짧은 compact 민감 구간에서만 유효한 기계적 표시다.
 10. 세션 압축 또는 재개 뒤에는 작업을 이어가기 전에 `docs/followup/active/`의 현재 active 파일을 먼저 확인한다. active followup이 있으면 압축 요약만 믿지 않고 목표, 고정 제약, 현재 상태, 다음 작업과 대조한 뒤 재개한다.
 11. 다음 세션에서는 followup 파일 1개와 그 파일이 가리키는 기준 문서만 다시 읽고 재개한다.
 
