@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import os
 import hashlib
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -15,6 +16,7 @@ from typing import Any
 ACTIVE_DIR = Path("docs/followup/active")
 STATE_DIR = ACTIVE_DIR / ".state"
 MARKER_FILE = STATE_DIR / "followup-compact-guard.json"
+PRECOMPACT_SNAPSHOT_FILE = STATE_DIR / "precompact-snapshot.json"
 MARKER_TTL_SECONDS = 15 * 60
 
 
@@ -166,6 +168,93 @@ def marker_status(root: Path, active_file: Path) -> tuple[bool, str]:
     return True, "marked"
 
 
+def load_marker(root: Path) -> dict[str, Any] | None:
+    marker = root / MARKER_FILE
+    try:
+        data = json.loads(marker.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def changed_scope_files(previous: dict[str, Any] | None, current: list[dict[str, Any]]) -> list[str]:
+    if not previous:
+        return [str(item.get("path")) for item in current if item.get("path")]
+
+    before_items = previous.get("watched_files")
+    if not isinstance(before_items, list):
+        return [str(item.get("path")) for item in current if item.get("path")]
+
+    before = {
+        str(item.get("path")): item
+        for item in before_items
+        if isinstance(item, dict) and item.get("path")
+    }
+
+    changed: list[str] = []
+    current_paths: set[str] = set()
+    for item in current:
+        path = item.get("path")
+        if not path:
+            continue
+        path_text = str(path)
+        current_paths.add(path_text)
+        if before.get(path_text) != item:
+            changed.append(path_text)
+
+    for path in sorted(set(before) - current_paths):
+        changed.append(path)
+
+    return changed
+
+
+def git_status_short(root: Path) -> list[str]:
+    try:
+        result = subprocess.run(
+            ["git", "status", "--short"],
+            cwd=root,
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=5,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return []
+    if result.returncode != 0:
+        return []
+    return [line for line in result.stdout.splitlines() if line.strip()]
+
+
+def write_precompact_snapshot(root: Path, active_file: Path, reason: str) -> Path:
+    scope_file, fingerprints, error = watched_fingerprints(root, active_file)
+    previous = load_marker(root)
+    snapshot: dict[str, Any] = {
+        "event": "pre-compact",
+        "created_at_epoch": int(time.time()),
+        "active_file": relative(active_file, root),
+        "scope_file": relative(scope_file, root) if scope_file else None,
+        "marker_reason": reason,
+        "changed_scope_files": changed_scope_files(previous, fingerprints),
+        "git_status_short": git_status_short(root),
+        "instruction": (
+            "After compact, read the active followup first. If this snapshot exists, "
+            "compare it with the active followup and compact summary, then inspect only "
+            "the needed changed scope files before continuing."
+        ),
+    }
+    if error:
+        snapshot["scope_error"] = error
+
+    path = root / PRECOMPACT_SNAPSHOT_FILE
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def precompact_snapshot_exists(root: Path) -> bool:
+    return (root / PRECOMPACT_SNAPSHOT_FILE).is_file()
+
+
 def marker_valid(root: Path, active_file: Path) -> bool:
     return marker_status(root, active_file)[0]
 
@@ -185,6 +274,10 @@ def write_marker(root: Path, active_file: Path) -> None:
         "meaning": "active followup and its scope were checked against the current recovery state",
     }
     marker.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    try:
+        (root / PRECOMPACT_SNAPSHOT_FILE).unlink()
+    except FileNotFoundError:
+        pass
 
 
 def status(root: Path) -> int:
@@ -264,28 +357,34 @@ def hook_response(mode: str, root: Path) -> int:
                     ),
                 }
             )
+        snapshot_path = write_precompact_snapshot(root, active_file, reason)
         return emit_hook(
             {
-                "continue": False,
-                "stopReason": "active followup must be checked before compact",
+                "continue": True,
                 "systemMessage": (
-                    "context compact가 중단됐습니다. "
-                    f"`{active_path}`와 `.scope`를 `followup-handoff` 절차로 확인하세요. "
-                    "현재 목표·제약·상태·다음 작업이 복구 가능하고 바뀐 정보가 없으면 갱신하지 말고, "
-                    "바뀐 복구 정보가 있으면 필요한 섹션만 짧게 갱신하세요. "
-                    "확인 또는 갱신이 끝나면 `python3 .codex/hooks/followup_compact_guard.py mark`를 실행한 뒤 작업을 재개하세요. "
+                    "context compact 직전에 active followup 확인 표시가 최신이 아니어서 "
+                    f"`{relative(snapshot_path, root)}`에 복구 snapshot을 남겼습니다. "
+                    "compact 이후에는 active followup을 먼저 읽고, snapshot과 압축 요약을 대조한 뒤 "
+                    "필요한 경우에만 active의 현재 상태와 다음 작업을 짧게 갱신하세요. "
                     f"사유: {reason}"
                 ),
             }
         )
 
     if mode == "post-compact":
+        snapshot_note = (
+            f" `{relative(root / PRECOMPACT_SNAPSHOT_FILE, root)}`가 있으면 함께 확인하고, "
+            "변경된 scope 파일은 필요한 섹션만 좁게 확인하세요."
+            if precompact_snapshot_exists(root)
+            else ""
+        )
         return emit_hook(
             {
                 "continue": True,
                 "systemMessage": (
                     "context compact 이후에는 작업 도구를 사용하기 전에 "
                     f"`{active_path}`를 먼저 읽고, 압축 요약과 목표·제약·현재 상태·다음 작업을 대조하세요."
+                    f"{snapshot_note}"
                 ),
             }
         )
@@ -311,8 +410,11 @@ def hook_response(mode: str, root: Path) -> int:
 
 def main() -> int:
     mode = sys.argv[1] if len(sys.argv) > 1 else "status"
-    hook_input = load_hook_input()
-    root = find_repo_root(hook_input.get("cwd"))
+    if mode in {"pre-compact", "post-compact", "session-start"}:
+        hook_input = load_hook_input()
+        root = find_repo_root(hook_input.get("cwd"))
+    else:
+        root = find_repo_root()
 
     if mode == "status":
         return status(root)

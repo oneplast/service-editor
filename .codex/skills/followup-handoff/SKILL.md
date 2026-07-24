@@ -18,13 +18,15 @@ description: "긴 작업, 세션 압축·재개, context 유실 위험이 있는
 
 기준 문서 수가 늘었다는 이유만으로 활성화하지 않는다. 현재 턴 안에 안전하게 완료할 수 있고 복구할 상태가 없는 작업에는 사용하지 않는다. 단순히 한 단계가 끝났다는 이유만으로 매번 갱신하지 않고, 다음 세션에서 복구해야 할 상태가 실제로 바뀌었을 때만 갱신한다.
 
-compact hook은 누락 방지용 보조 가드다. 의미 있는 상태 판단과 active followup 작성은 이 skill 절차가 담당한다. 긴 검증, 여러 run, 여러 subagent, 장기 실행을 시작하기 전이나 현재 상태가 바뀐 뒤 다음 단계에서 복구가 필요할 수 있으면, hook이 막기 전이라도 active followup 갱신 필요 여부를 먼저 판단한다. 갱신하지 않으려면 다음 세션 복구에 필요한 목표, 고정 제약, 현재 상태, 다음 작업이 바뀌지 않았다고 판단할 수 있어야 한다.
+compact hook은 누락 방지용 보조 가드다. 의미 있는 상태 판단과 active followup 작성은 이 skill 절차가 담당한다. 긴 검증, 여러 run, 여러 subagent, 장기 실행을 시작하기 전이나 현재 상태가 바뀐 뒤 다음 단계에서 복구가 필요할 수 있으면 active followup 갱신 필요 여부를 먼저 판단한다. 갱신하지 않으려면 다음 세션 복구에 필요한 목표, 고정 제약, 현재 상태, 다음 작업이 바뀌지 않았다고 판단할 수 있어야 한다.
 
 상태 전환 checkpoint는 active followup을 매번 다시 쓰기 위한 신호가 아니라, 다음 세션 복구 상태가 바뀌었는지 확인하는 신호다. 긴 작업이나 여러 run을 시작하기 전, subagent·외부 실행·장기 검증을 시작하기 전, run 결과 수집 뒤 다음 재개 지점이 바뀐 때, SOT 문서나 scope가 바뀐 때, 미완료 상태로 턴을 마칠 때만 확인한다. 복구 정보가 바뀌지 않았으면 문서를 수정하지 않고 marker만 갱신한다.
 
-active followup 옆의 `.scope` 파일은 compact guard가 최신성을 확인할 파일 목록이다. active가 있는 긴 작업에서 복구에 필요한 기준 문서, 결과 문서, scope, 실행 상태가 바뀌면 compact marker를 찍기 전에 active followup을 현재 복구 상태와 맞춘다. hook은 active를 자동 작성하지 않고, stale 상태로 compact되는 것을 줄이는 보조 가드로만 본다.
+active followup 옆의 `.scope` 파일은 compact guard가 최신성을 확인할 파일 목록이다. active가 있는 긴 작업에서 복구에 필요한 기준 문서, 결과 문서, scope, 실행 상태가 바뀌면 compact marker를 찍기 전에 active followup을 현재 복구 상태와 맞춘다. hook은 active를 자동 작성하지 않고, stale 상태가 확인되면 compact 전 기계적 snapshot만 남기는 보조 가드로 본다.
 
-PreCompact hook이 active followup 확인을 요구해 compact를 중단하면, hook을 우회하지 않고 이 skill로 active 파일과 `.scope`를 확인한다. active가 이미 현재 복구 상태와 맞으면 문서를 갱신하지 않고 marker만 찍는다. 목표, 고정 제약, 현재 상태, 다음 작업, 보존해야 할 리소스처럼 다음 세션 복구에 필요한 정보가 달라졌을 때만 해당 섹션을 짧게 갱신한 뒤 marker를 찍는다.
+PreCompact hook은 일반 stale 상태에서 active를 의미적으로 갱신하지 않고, `.state/precompact-snapshot.json`에 변경 후보와 marker 사유만 남긴다. 세션 압축 또는 재개 뒤에는 active followup을 항상 먼저 확인하고, precompact snapshot이 있으면 함께 대조한다. active가 이미 현재 복구 상태와 맞으면 문서를 갱신하지 않고 marker만 찍는다. 목표, 고정 제약, 현재 상태, 다음 작업, 보존해야 할 리소스처럼 다음 세션 복구에 필요한 정보가 달라졌을 때만 해당 섹션을 짧게 갱신한 뒤 marker를 찍는다.
+
+compact marker는 active followup과 `.scope` 파일들이 최근에 확인됐다는 기계적 표시다. marker가 유효하더라도 현재 턴의 목표, 실행 단계, 다음 재개 지점이 active와 맞는지까지 보장하지 않는다. 세션 압축 또는 재개 뒤 active를 읽고 같은 장기 작업을 이어가거나, SOT 문서·scope·실행 단계가 바뀌는 작업을 시작할 때는 marker 유효 여부와 별개로 checkpoint 판단을 먼저 한다.
 
 ## 절차
 
@@ -41,9 +43,11 @@ PreCompact hook이 active followup 확인을 요구해 compact를 중단하면, 
 7. 긴 작업, 여러 run, subagent·외부 실행·장기 검증, SOT 문서 변경, scope 변경, 미완료 상태의 턴 종료는 상태 전환 checkpoint로 본다. checkpoint에서는 active 전체를 다시 쓰지 말고 복구 정보 변경 여부만 확인한다.
 8. compact 전에는 active 파일을 길게 다시 쓰지 않는다. 복구에 필요한 현재 작업 축, 완료·미완료 상태, 다음 재개 지점, 보존해야 할 리소스나 주의점, `.scope` 최신성만 확인하거나 짧게 갱신한다.
 9. 현재 active 작업과 다른 짧은 부작업이 끼어들었고, 그 부작업 때문에 원래 작업의 중단 지점이나 재개 순서가 헷갈릴 수 있으면 active 파일에 부작업의 상세 이력이 아니라 현재 중단 지점과 재개 순서만 짧게 반영한다.
-10. compact hook이 active followup 확인을 요구해 compact가 중단되면 이 절차로 active 파일과 `.scope` 대상을 확인한다. 현재 복구 상태가 이미 맞으면 갱신하지 않고, 달라진 복구 정보가 있으면 필요한 섹션만 짧게 갱신한다. 확인 또는 갱신이 끝났고 복구 가능하다고 판단했을 때만 `python3 .codex/hooks/followup_compact_guard.py mark`를 실행한다. marked 상태는 짧은 compact 민감 구간에서만 유효한 기계적 표시다.
+10. compact hook이 precompact snapshot을 남겼으면 세션 압축 또는 재개 뒤 active 파일과 snapshot을 함께 확인한다. snapshot은 복구 보조 자료일 뿐 active 본문을 대체하지 않는다. snapshot의 변경 후보 파일은 필요한 섹션만 좁게 확인한다.
 11. 세션 압축 또는 재개 뒤에는 작업을 이어가기 전에 `docs/followup/active/`의 현재 active 파일을 먼저 확인한다. active followup이 있으면 압축 요약만 믿지 않고 목표, 고정 제약, 현재 상태, 다음 작업과 대조한 뒤 재개한다.
-12. 다음 세션에서는 followup 파일 1개와 그 파일이 가리키는 기준 문서만 다시 읽고 재개한다.
+12. active를 읽은 뒤 같은 장기 작업을 이어가면, 첫 도구 작업을 넓게 시작하기 전에 현재 요청이 active의 목표, 고정 제약, 현재 상태, 다음 작업과 어긋나는지 확인한다. 어긋나면 필요한 섹션만 갱신하고, 어긋나지 않으면 갱신하지 않는다.
+13. 현재 복구 상태가 이미 맞으면 갱신하지 않고, 달라진 복구 정보가 있으면 필요한 섹션만 짧게 갱신한다. 확인 또는 갱신이 끝났고 복구 가능하다고 판단했을 때만 `python3 .codex/hooks/followup_compact_guard.py mark`를 실행한다. marked 상태는 짧은 compact 민감 구간에서만 유효한 기계적 표시다.
+14. 다음 세션에서는 followup 파일 1개와 그 파일이 가리키는 기준 문서만 다시 읽고 재개한다.
 
 ## 하지 말 것
 

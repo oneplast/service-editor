@@ -32,8 +32,11 @@
 - 긴 검증, 여러 run, subagent·외부 실행, 장기 실행, SOT 문서 변경, scope 변경, 미완료 상태의 턴 종료처럼 복구 상태가 바뀔 수 있는 checkpoint에서는 active 파일 갱신 필요 여부를 먼저 판단한다.
 - checkpoint는 active 파일을 매번 다시 쓰기 위한 신호가 아니다. 복구 정보가 바뀌지 않았으면 문서를 수정하지 않고 compact marker만 갱신한다.
 - compact 전 갱신은 현재 작업 축, 완료·미완료 상태, 다음 재개 지점, 보존해야 할 리소스나 주의점, scope 최신성처럼 복구에 필요한 최소 상태만 다룬다.
-- compact hook이 active followup 확인을 요구해 compact가 중단되면 `followup-handoff` 절차로 active 파일과 `.scope` 대상을 확인한다. 복구 상태가 이미 맞으면 갱신하지 않고, 달라진 복구 정보가 있을 때만 필요한 섹션을 짧게 갱신한 뒤 hook guard를 marked 상태로 둔다. marked 상태는 짧은 compact 민감 구간에서만 유효하다.
-- 세션 압축 또는 재개 뒤에는 active 파일이 있으면 먼저 읽고, 압축 요약이나 현재 세션 요약과 충돌하는 부분이 없는지 대조한다.
+- compact hook은 active 본문을 자동 갱신하지 않는다. 일반 stale 상태가 확인되면 `.state/precompact-snapshot.json`에 기계적 복구 단서만 남기고, active 파일이 여러 개이거나 `.scope`가 안전하지 않은 경우에만 중단할 수 있다.
+- 세션 압축 또는 재개 뒤에는 active 파일이 있으면 먼저 읽고, 압축 요약이나 현재 세션 요약과 충돌하는 부분이 없는지 대조한다. precompact snapshot이 있으면 함께 확인하되, snapshot은 active 본문을 대체하지 않는다.
+- compact marker는 active와 `.scope`가 최근 확인됐다는 기계적 표시일 뿐, 현재 턴의 목표나 다음 작업이 active에 의미적으로 반영됐다는 보장이 아니다.
+- 세션 압축 또는 재개 뒤 같은 장기 작업을 이어가거나, SOT 문서·scope·실행 단계가 바뀌는 작업을 시작할 때는 marker가 유효해도 active의 목표, 고정 제약, 현재 상태, 다음 작업과 현재 요청을 먼저 대조한다.
+- 복구 상태가 이미 맞으면 active를 갱신하지 않고 compact marker만 갱신한다. 달라진 복구 정보가 있을 때만 필요한 섹션을 짧게 갱신한 뒤 marker를 둔다. marked 상태는 짧은 compact 민감 구간에서만 유효하다.
 - 다음 세션에서 이 파일 하나만 읽어도 바로 재개할 수 있어야 한다.
 - 반복 절차가 필요하면 [`.codex/skills/followup-handoff/SKILL.md`](https://github.com/oneplast/service-editor/blob/dev/.codex/skills/followup-handoff/SKILL.md)를 따른다.
 - 문서 영향 판정과 공식 문서 갱신 대상은 [`.codex/config/doc-update-matrix.md`](https://github.com/oneplast/service-editor/blob/dev/.codex/config/doc-update-matrix.md)를 따른다.
