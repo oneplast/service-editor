@@ -19,10 +19,10 @@ description: "코드 변경이나 계약 문서 변경 시 필요한 구현 검�
 
 1. 가능하면 `--scope-file`로 현재 작업 파일 목록을 고정한다.
 2. 메인 에이전트가 확정한 구현 변경 성격이 `implementation-change`, `contract-change`, `non-contract-doc`, `verification-only` 중 무엇인지 확인한다.
-3. 변경 성격 입력이 없거나 scope·diff와 어긋나면 `.codex/config/gate-state-contract.md` 형식으로 `UNCLASSIFIED`를 반환하고 구현 검증 완료를 보류한다.
-4. `.codex/config/doc-to-code-check-matrix.md`에서 변경 성격별 게이트와 기본 테스트 단위를 확인한다.
-5. followup 파일이 있으면 `현재 상태`의 `검증 단계`를 확인한다. `진행 중`이면 필요한 컴파일, 좁은 테스트, sanity check만 고른다.
-6. scope와 구현 변경 성격을 명시해 `.codex/scripts/check-doc-implementation.sh --change-kind <kind> --dry-run`으로 최소 테스트 계획을 확인한다.
+3. 단순 구현이나 단일 모듈 변경에서는 먼저 `.codex/scripts/check-doc-implementation.sh --change-kind <kind> --scope-file <scope> --dry-run --json`으로 검증 계획만 받는다.
+4. JSON 결과가 `PASS`이고 `verification_floor`가 명확하면 그 출력만 기준으로 검증 floor를 정한다. 이때 matrix나 script 본문을 추가로 읽지 않는다.
+5. JSON 결과가 `UNCLASSIFIED`, `FAIL`, 빈 floor, 여러 모듈/루트 설정 변경, 계약 문서 변경, 실패 재시도, scope 불명확 상태이면 그때만 `.codex/config/doc-to-code-check-matrix.md`와 필요한 script 본문을 확인한다.
+6. followup 파일이 있으면 `현재 상태`의 `검증 단계`를 확인한다. `진행 중`이면 필요한 컴파일, 좁은 테스트, sanity check만 고른다.
 7. scope 파일 경로만으로 followup 연결이 어려우면 `--followup-file <path>`를 함께 넘긴다.
 8. 구현 검증 대상이 `검증 대기` 단계에 들어가면 `--run --result-file docs/followup/active/.state/<task>-implementation.state`로 선택한 구현 검증을 최초 한 번 실행한다.
 9. `PASS`이면 구현 검증 게이트를 닫고, `FAIL`이면 `.codex/config/gate-state-contract.md`의 실패 정보를 메인 에이전트에 반환한다. 이 skill에서 `verification-retry`나 `runbook`을 직접 활성화하지 않는다.
@@ -46,3 +46,4 @@ description: "코드 변경이나 계약 문서 변경 시 필요한 구현 검�
 - 일반 구현·검증 결과를 남기기 위해 prompts 게이트를 자동 활성화하지 않는다.
 - 코드 변경이 있는데 문서 거버넌스 검증만 통과했다고 끝내지 않는다.
 - 자동 판별만으로 충분하다고 보고 최종 테스트 범위 판단을 생략하지 않는다.
+- 단순 구현의 검증 계획 확인만을 위해 matrix와 script 본문을 먼저 읽지 않는다. 구조화된 dry-run 출력으로 부족할 때만 세부 원본을 확인한다.

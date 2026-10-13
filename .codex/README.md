@@ -28,6 +28,7 @@
 - 프로젝트별 세션 복구와 handoff 기준은 `docs/followup/`을 따른다.
 - context compact 전후 active followup 확인은 hook이 보조할 수 있지만, active 파일 생성·갱신·복구 판단은 `docs/followup/`과 `followup-handoff` skill을 따른다.
 - 문서 체계 검증은 `.codex/scripts/check-doc-governance.sh`, 구현 검증 필요 여부 판별과 테스트 실행은 `.codex/scripts/check-doc-implementation.sh`를 기준으로 한다.
+- 단순 구현이나 단일 모듈 변경의 구현 검증 계획은 `.codex/scripts/check-doc-implementation.sh --dry-run --json` 출력을 먼저 사용한다. JSON 출력이 명확하면 skill/config/script 본문을 추가로 읽지 않고 해당 floor로 검증하며, 불확실·실패·복합 변경일 때만 세부 원본으로 승격한다.
 - 검증 실패 재검증과 메인이 확정한 실패 케이스 기록은 `.codex/config/failure-route-map.md`, `.codex/scripts/verify-and-retry.sh`, `.codex/skills/verification-retry/SKILL.md`를 기준으로 한다.
 - 구현 검증의 경로별 태스크와 로컬 제외 테스트는 `.codex/config/doc-to-code-check-matrix.md`를 원본으로 본다.
 - subagent 역할과 task packet 계약은 `.codex/config/subagent-task-contract.md`를 원본으로 보고, 선택적 호출과 결과 통합 절차는 `.codex/skills/subagent-orchestration/SKILL.md`를 따른다. subagent는 상시 분업자가 아니라 선택적 capability다.

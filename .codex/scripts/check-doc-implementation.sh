@@ -13,6 +13,7 @@ followup_file=""
 result_file=""
 run_mode=false
 dry_run=false
+json_output=false
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -39,6 +40,18 @@ while [ $# -gt 0 ]; do
     --dry-run)
       dry_run=true
       shift
+      ;;
+    --json)
+      json_output=true
+      shift
+      ;;
+    --format)
+      if [ "${2:-}" != "json" ]; then
+        printf '지원하지 않는 출력 형식: %s\n' "${2:-}" >&2
+        exit 64
+      fi
+      json_output=true
+      shift 2
       ;;
     *)
       printf '알 수 없는 옵션: %s\n' "$1" >&2
@@ -70,6 +83,54 @@ resolve_verification_stage() {
   if [ -n "$resolved_followup" ] && [ -f "$resolved_followup" ]; then
     sed -n 's/^- 검증 단계:[[:space:]]*//p' "$resolved_followup" | head -n 1 | tr -d '\r'
   fi
+}
+
+json_string() {
+  local value=${1:-}
+  value=${value//\\/\\\\}
+  value=${value//\"/\\\"}
+  value=${value//$'\n'/\\n}
+  value=${value//$'\r'/}
+  printf '"%s"' "$value"
+}
+
+json_array() {
+  local array_name=$1
+  local -n values_ref=$array_name
+  local first=true
+  local value
+  printf '['
+  for value in "${values_ref[@]:-}"; do
+    if [ "$first" = true ]; then
+      first=false
+    else
+      printf ','
+    fi
+    json_string "$value"
+  done
+  printf ']'
+}
+
+write_plan_json() {
+  local status=$1
+  local classification=$2
+  local message=$3
+  local requires_full_test=$4
+  printf '{'
+  printf '"gate":"implementation-verification",'
+  printf '"status":'; json_string "$status"; printf ','
+  printf '"classification":'; json_string "$classification"; printf ','
+  printf '"change_kind":'; json_string "${change_kind:-unknown}"; printf ','
+  printf '"message":'; json_string "$message"; printf ','
+  printf '"scope_fingerprint":'; json_string "$scope_fingerprint"; printf ','
+  printf '"scope_paths":'; json_array scope_paths; printf ','
+  printf '"verification_floor":'; json_array module_tasks; printf ','
+  printf '"requires_full_test":%s,' "$requires_full_test"
+  printf '"reasons":'; json_array reasons; printf ','
+  printf '"dependency_paths":'; json_array dependency_paths; printf ','
+  printf '"dependency_patterns":'; json_array dependency_patterns; printf ','
+  printf '"excluded_tests":['; json_string "$excluded_boot_test"; printf ']'
+  printf '}\n'
 }
 
 module_tasks=()
@@ -162,8 +223,19 @@ if [ -z "$change_kind" ]; then
   if [ "$implementation_candidate" = false ]; then
     gate_write_result "$result_file" implementation-verification PASS not-applicable "$scope_fingerprint" EMPTY complete \
       '구현 검증 후보 변경 없음'
+    if [ "$json_output" = true ]; then
+      write_plan_json PASS not-applicable '구현 검증 후보 변경 없음' false
+      exit 0
+    fi
     printf '[PASS] 구현 검증 후보 변경 없음\n'
     exit 0
+  fi
+
+  if [ "$json_output" = true ]; then
+    gate_write_result "$result_file" implementation-verification UNCLASSIFIED unknown "$scope_fingerprint" "$scope_fingerprint" \
+      'change-kind 입력' '구현 변경 성격 미확정' "${scope_paths[@]}"
+    write_plan_json UNCLASSIFIED unknown '구현 검증 후보 경로가 있지만 명시된 변경 성격이 없습니다.' false
+    exit 2
   fi
 
   gate_print_unclassified \
@@ -181,11 +253,21 @@ case "$change_kind" in
   non-contract-doc|workflow-implementation-change|content-only)
     gate_write_result "$result_file" implementation-verification PASS "$change_kind" "$scope_fingerprint" EMPTY complete \
       '구현 의미 변경이 아니므로 게이트 비활성'
+    if [ "$json_output" = true ]; then
+      write_plan_json PASS "$change_kind" '구현 의미 변경이 아니므로 게이트 비활성' false
+      exit 0
+    fi
     printf '[PASS] 구현 검증 게이트 비활성\n'
     exit 0
     ;;
   implementation-change)
     if [ "$require_check" = false ]; then
+      if [ "$json_output" = true ]; then
+        gate_write_result "$result_file" implementation-verification UNCLASSIFIED "$change_kind" "$scope_fingerprint" "$scope_fingerprint" \
+          'change-kind 입력' '구현 변경 성격과 scope 불일치' "${scope_paths[@]}"
+        write_plan_json UNCLASSIFIED "$change_kind" 'implementation-change 입력과 구현 경로 후보가 일치하지 않습니다.' false
+        exit 2
+      fi
       gate_print_unclassified \
         '구현 변경 성격과 scope' \
         'implementation-change 입력과 구현 경로 후보가 일치하지 않습니다.' \
@@ -199,6 +281,12 @@ case "$change_kind" in
     ;;
   verification-only)
     if [ "$require_check" = false ]; then
+      if [ "$json_output" = true ]; then
+        gate_write_result "$result_file" implementation-verification UNCLASSIFIED "$change_kind" "$scope_fingerprint" "$scope_fingerprint" \
+          'change-kind 입력' '검증 전용 변경 성격과 scope 불일치' "${scope_paths[@]}"
+        write_plan_json UNCLASSIFIED "$change_kind" 'verification-only 입력과 테스트 또는 검증 대상 경로가 일치하지 않습니다.' false
+        exit 2
+      fi
       gate_print_unclassified \
         '검증 전용 변경 범위' \
         'verification-only 입력과 테스트 또는 검증 대상 경로가 일치하지 않습니다.' \
@@ -216,6 +304,12 @@ case "$change_kind" in
     add_once '^documents-(api|core|infrastructure|boot)/src/|^documents-[^/]+/build\.gradle$|^build\.gradle$|^settings\.gradle$|^gradlew$|^docs/REQUIREMENTS\.md$|^docs/guides/|^docs/decisions/' dependency_patterns
     ;;
   *)
+    if [ "$json_output" = true ]; then
+      gate_write_result "$result_file" implementation-verification UNCLASSIFIED "$change_kind" "$scope_fingerprint" "$scope_fingerprint" \
+        'change-kind 입력' '지원하지 않는 구현 변경 성격' "${scope_paths[@]}"
+      write_plan_json UNCLASSIFIED "$change_kind" "지원하지 않는 변경 성격입니다: $change_kind" false
+      exit 2
+    fi
     gate_print_unclassified \
       '구현 변경 성격' \
       "지원하지 않는 변경 성격입니다: $change_kind" \
@@ -236,6 +330,11 @@ if [ ${#module_tasks[@]} -eq 0 ]; then
 fi
 if [ ${#dependency_paths[@]} -eq 0 ]; then
   dependency_paths=("${scope_paths[@]}")
+fi
+
+if [ "$json_output" = true ] && { [ "$dry_run" = true ] || [ "$run_mode" = false ]; }; then
+  write_plan_json PASS "$change_kind" '구현 검증 계획 산출' "$full_test"
+  exit 0
 fi
 
 printf '[PLAN] 구현 검증 필요\n'

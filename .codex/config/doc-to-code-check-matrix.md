@@ -86,6 +86,12 @@ scope 파일이 있으면 해당 파일 목록만 후보 탐지와 테스트 범
 
 ## 검증 단위
 
+### Fast path 요약
+
+단순 구현이나 단일 모듈 변경에서는 이 문서 전문을 먼저 읽지 않고 `.codex/scripts/check-doc-implementation.sh --dry-run --json` 결과를 우선 사용한다.
+
+모듈별 테스트 floor의 원본은 아래 `모듈별 기본 테스트 태스크`와 `전체 테스트로 올려야 하는 경우` 섹션이다. JSON 결과가 `UNCLASSIFIED`, 빈 floor, 다중 모듈, 계약 문서 변경, 실패 재시도처럼 추가 판단을 요구할 때만 아래 상세 기준을 확인한다.
+
 ### 모듈별 기본 테스트 태스크
 
 - `documents-api/**` -> `:documents-api:test`

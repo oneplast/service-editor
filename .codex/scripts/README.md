@@ -38,11 +38,19 @@ bash .codex/scripts/check-doc-implementation.sh \
 bash .codex/scripts/check-doc-implementation.sh \
   --change-kind implementation-change \
   --scope-file <scope> \
+  --dry-run \
+  --json
+
+bash .codex/scripts/check-doc-implementation.sh \
+  --change-kind implementation-change \
+  --scope-file <scope> \
   --run \
   --result-file docs/followup/active/.state/<task>-implementation.state
 ```
 
 기본 실행과 `--dry-run`은 테스트 계획만 출력한다. `--run`일 때만 테스트를 실행하고 최종 게이트 결과를 저장한다.
+
+단순 구현이나 단일 모듈 변경에서는 `--dry-run --json` 출력을 먼저 사용한다. JSON 출력의 `verification_floor`가 명확하면 script 본문이나 matrix 전문을 읽지 않고 해당 floor를 기준으로 검증한다. `UNCLASSIFIED`, 빈 floor, 다중 모듈, 루트 Gradle 변경, 계약 문서 변경, 검증 실패처럼 추가 판단이 필요한 경우에만 세부 config나 script 본문을 확인한다.
 
 ## 실패 재시도
 
