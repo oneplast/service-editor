@@ -11,7 +11,9 @@
   - `1`: `FAIL`
   - `2`: `UNCLASSIFIED`
   - `64`: 잘못된 옵션
-- `--scope-file`이 있으면 해당 파일 목록만 사용하고, 없을 때만 `git status` 전체를 fallback으로 사용한다.
+- `--scope-path <path>`를 반복해서 넘기면 그 경로 목록만 사용한다. script는 내부에서 임시 scope 파일로 변환해 기존 fingerprint와 검증 계획 산출 흐름을 그대로 사용하고, 종료 시 임시 파일을 정리한다.
+- `--scope-file`이 있으면 해당 파일 목록만 사용하고, 없을 때만 `git status` 전체를 fallback으로 사용한다. `--scope-path`와 `--scope-file`은 함께 사용하지 않는다.
+- `--scope-file`은 작업 파일 목록을 담은 실제 일반 파일 경로여야 한다. `<(printf ...)`, `/dev/fd/*`, `/proc/*/fd/*`, `-` 같은 임시 입력은 재현 가능한 scope 파일로 쓰지 않는다.
 - `--result-file docs/followup/active/.state/<task>-<gate>.state`를 지정하면 게이트, 상태, 변경 성격, scope fingerprint, 직접 의존 파일 해시와 재개 지점을 기록한다.
 - 상태 파일은 `docs/followup/active/**` ignore 범위에 두며 followup에 필요한 경로만 남긴다.
 - script는 명시된 `--change-kind`를 소비하며 경로만으로 의미론적 변경 성격을 확정하지 않는다.
@@ -30,20 +32,33 @@ bash .codex/scripts/check-doc-governance.sh \
 ## 구현 검증
 
 ```bash
+mkdir -p build/codex
+printf '%s\n' \
+  path/to/changed-file.kt \
+  path/to/changed-test.kt \
+  > build/codex/scope.txt
+
 bash .codex/scripts/check-doc-implementation.sh \
   --change-kind implementation-change \
-  --scope-file <scope> \
+  --scope-file build/codex/scope.txt \
   --dry-run
 
 bash .codex/scripts/check-doc-implementation.sh \
   --change-kind implementation-change \
-  --scope-file <scope> \
+  --scope-path path/to/changed-file.kt \
+  --scope-path path/to/changed-test.kt \
   --dry-run \
   --json
 
 bash .codex/scripts/check-doc-implementation.sh \
   --change-kind implementation-change \
-  --scope-file <scope> \
+  --scope-file build/codex/scope.txt \
+  --dry-run \
+  --json
+
+bash .codex/scripts/check-doc-implementation.sh \
+  --change-kind implementation-change \
+  --scope-file build/codex/scope.txt \
   --run \
   --result-file docs/followup/active/.state/<task>-implementation.state
 ```

@@ -154,6 +154,17 @@ run_implementation_scenarios() {
   assert_output_contains implementation_api_dry_run '기본 테스트 태스크: :documents-api:test'
   assert_output_contains implementation_api_dry_run '[PLAN] 테스트는 실행하지 않았습니다.'
 
+  run_and_capture implementation_scope_path_json \
+    bash .codex/scripts/check-doc-implementation.sh --change-kind implementation-change --scope-path documents-api/src/main/java/example/Foo.java --dry-run --json
+  assert_status implementation_scope_path_json 0
+  assert_output_contains implementation_scope_path_json '"verification_floor":[":documents-api:test"]'
+  assert_output_contains implementation_scope_path_json '"scope_paths":["documents-api/src/main/java/example/Foo.java"]'
+
+  run_and_capture implementation_scope_input_conflict \
+    bash .codex/scripts/check-doc-implementation.sh --change-kind implementation-change --scope-file "$scope" --scope-path documents-api/src/main/java/example/Foo.java --dry-run
+  assert_status implementation_scope_input_conflict 64
+  assert_output_contains implementation_scope_input_conflict 'scope-file과 scope-path는 함께 사용할 수 없습니다.'
+
   scope=$(write_scope root_build_change build.gradle)
   run_and_capture implementation_root_dry_run \
     bash .codex/scripts/check-doc-implementation.sh --change-kind implementation-change --scope-file "$scope" --dry-run

@@ -17,9 +17,9 @@ description: "코드 변경이나 계약 문서 변경 시 필요한 구현 검�
 
 ## 절차
 
-1. 가능하면 `--scope-file`로 현재 작업 파일 목록을 고정한다.
+1. 가능하면 현재 작업 파일 목록을 고정한다. 짧은 범위는 `--scope-path <path>`를 반복해서 넘기고, 이미 scope 파일이 있거나 다음 세션 복구에 같은 입력 파일이 필요하면 `--scope-file <scope>`을 넘긴다. `--scope-file`에는 작업 파일 목록을 담은 실제 파일 경로를 넘긴다. process substitution, `/dev/fd/*`, stdin 대체 입력은 재현 가능한 scope 파일로 보지 않는다.
 2. 메인 에이전트가 확정한 구현 변경 성격이 `implementation-change`, `contract-change`, `non-contract-doc`, `verification-only` 중 무엇인지 확인한다.
-3. 단순 구현이나 단일 모듈 변경에서는 먼저 `.codex/scripts/check-doc-implementation.sh --change-kind <kind> --scope-file <scope> --dry-run --json`으로 검증 계획만 받는다.
+3. 단순 구현이나 단일 모듈 변경에서는 먼저 `.codex/scripts/check-doc-implementation.sh --change-kind <kind> <scope 입력> --dry-run --json`으로 검증 계획만 받는다.
 4. JSON 결과가 `PASS`이고 `verification_floor`가 명확하면 그 출력만 기준으로 검증 floor를 정한다. 이때 matrix나 script 본문을 추가로 읽지 않는다.
 5. JSON 결과가 `UNCLASSIFIED`, `FAIL`, 빈 floor, 여러 모듈/루트 설정 변경, 계약 문서 변경, 실패 재시도, scope 불명확 상태이면 그때만 `.codex/config/doc-to-code-check-matrix.md`와 필요한 script 본문을 확인한다.
 6. followup 파일이 있으면 `현재 상태`의 `검증 단계`를 확인한다. `진행 중`이면 필요한 컴파일, 좁은 테스트, sanity check만 고른다.

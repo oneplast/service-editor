@@ -8,8 +8,20 @@ gate_load_changed_files() {
   local scope_file=$1
 
   if [ -n "$scope_file" ]; then
-    if [ ! -f "$scope_file" ]; then
+    case "$scope_file" in
+      -|/dev/fd/*|/proc/self/fd/*|/proc/[0-9]*/fd/*)
+        printf '[UNCLASSIFIED] scope-file은 작업 파일 목록을 담은 실제 일반 파일이어야 합니다: %s\n' "$scope_file" >&2
+        printf '[HINT] 임시 file descriptor나 stdin 대신 scope 목록을 파일로 저장한 뒤 그 경로를 넘기세요.\n' >&2
+        return 2
+        ;;
+    esac
+
+    if [ ! -e "$scope_file" ]; then
       printf '[UNCLASSIFIED] scope 파일을 찾을 수 없습니다: %s\n' "$scope_file" >&2
+      return 2
+    fi
+    if [ ! -f "$scope_file" ]; then
+      printf '[UNCLASSIFIED] scope-file은 작업 파일 목록을 담은 실제 일반 파일이어야 합니다: %s\n' "$scope_file" >&2
       return 2
     fi
     grep -v '^[[:space:]]*$' "$scope_file" | sed 's#^\./##' | sort -u

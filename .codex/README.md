@@ -31,6 +31,7 @@
 - 단순 구현이나 단일 모듈 변경의 구현 검증 계획은 `.codex/scripts/check-doc-implementation.sh --dry-run --json` 출력을 먼저 사용한다. JSON 출력이 명확하면 skill/config/script 본문을 추가로 읽지 않고 해당 floor로 검증하며, 불확실·실패·복합 변경일 때만 세부 원본으로 승격한다.
 - 검증 실패 재검증과 메인이 확정한 실패 케이스 기록은 `.codex/config/failure-route-map.md`, `.codex/scripts/verify-and-retry.sh`, `.codex/skills/verification-retry/SKILL.md`를 기준으로 한다.
 - 구현 검증의 경로별 태스크와 로컬 제외 테스트는 `.codex/config/doc-to-code-check-matrix.md`를 원본으로 본다.
+- 구현 검증 scope 입력은 짧은 범위의 `--scope-path` 반복 입력 또는 재현 가능한 실제 scope 파일 경로를 기준으로 하며, 세부 예시는 `.codex/scripts/README.md`와 `implementation-check` skill을 따른다.
 - subagent 역할과 task packet 계약은 `.codex/config/subagent-task-contract.md`를 원본으로 보고, 선택적 호출과 결과 통합 절차는 `.codex/skills/subagent-orchestration/SKILL.md`를 따른다. subagent는 상시 분업자가 아니라 선택적 capability다.
 - `AGENTS.md`는 게이트 존재와 상위 활성화 원칙, README는 경로 규칙, config는 세부 판정 기준, skill은 실행 절차, script는 입력·출력과 기계적 실행을 소유한다.
 - 하위 파일은 상위 원칙을 다시 정의하지 않고, 자신의 역할에 필요한 세부 계약만 둔다.

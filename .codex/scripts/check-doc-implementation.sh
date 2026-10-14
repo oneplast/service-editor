@@ -9,11 +9,24 @@ source .codex/scripts/gate-common.sh
 
 change_kind=""
 scope_file=""
+scope_path_args=()
 followup_file=""
 result_file=""
 run_mode=false
 dry_run=false
 json_output=false
+materialized_scope_dir=""
+
+cleanup_materialized_scope() {
+  if [ -n "$materialized_scope_dir" ]; then
+    rm -rf "$materialized_scope_dir"
+  fi
+}
+
+trap cleanup_materialized_scope EXIT
+trap 'cleanup_materialized_scope; exit 129' HUP
+trap 'cleanup_materialized_scope; exit 130' INT
+trap 'cleanup_materialized_scope; exit 143' TERM
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -23,6 +36,10 @@ while [ $# -gt 0 ]; do
       ;;
     --scope-file)
       scope_file="$2"
+      shift 2
+      ;;
+    --scope-path)
+      scope_path_args+=("$2")
       shift 2
       ;;
     --followup-file)
@@ -59,6 +76,17 @@ while [ $# -gt 0 ]; do
       ;;
   esac
 done
+
+if [ -n "$scope_file" ] && [ ${#scope_path_args[@]} -gt 0 ]; then
+  printf 'scope-file과 scope-path는 함께 사용할 수 없습니다.\n' >&2
+  exit 64
+fi
+
+if [ ${#scope_path_args[@]} -gt 0 ]; then
+  materialized_scope_dir=$(mktemp -d "${TMPDIR:-/tmp}/codex-scope.XXXXXXXX")
+  scope_file="$materialized_scope_dir/scope.txt"
+  printf '%s\n' "${scope_path_args[@]}" > "$scope_file"
+fi
 
 changed_files=$(gate_load_changed_files "$scope_file") || exit $?
 mapfile -t scope_paths < <(printf '%s\n' "$changed_files" | sed '/^$/d')
